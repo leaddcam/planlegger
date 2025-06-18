@@ -1,0 +1,14 @@
+.emne-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.emne-page h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.emne-page p {
+  font-size: 1.2rem;
+  color: #333;
+}

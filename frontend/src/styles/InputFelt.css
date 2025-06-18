@@ -1,0 +1,23 @@
+/* src/components/UrlInput.css */
+
+.url-input-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.url-input-container input {
+  margin-left: 1rem;
+  padding: 0.5rem;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.url-input-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.url-input-container a:hover {
+  text-decoration: underline;
+}

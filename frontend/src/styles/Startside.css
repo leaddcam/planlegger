@@ -1,0 +1,29 @@
+.startside {
+    border-radius: 12px;
+    padding: 2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+}
+
+.startside-knapp {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+.startside-knapp:hover {
+    background-color: #0056b3;
+}

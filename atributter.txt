@@ -1,0 +1,23 @@
+generell oversikt
+- eksamensdatoer (fra semestersidene) for alle emner
+- progresjons-"blokk" (0-100%) - 2 stk
+    finn kul måte å representere det på
+    * antall obliger/innleveringer levert
+    * antall forelesninger gjennomgått
+
+valgalternativer
+- velg emnekode
+    + viser emnestats
+        * eksamensstats
+            + dato
+            + varighet
+            + karakterskala 
+            + hjelpemidler
+        * hvilke dager er det forelesning
+        * hvilke dager er det øvelser/lab
+        * læringsressurser (slides og pensum)
+    + viser innebygd notatblokk
+        * tid tas hver gang du bruker den
+- klikk på progresjonsblokk
+    + viser periodene du brukte notatblokken knyttet til emnet 
+    + viser

@@ -1,0 +1,6 @@
+root /: 
+- knapp i midten: Home
+    tar deg til /home ruten, som vil vise Home-komponenten
+/home
+- EmneKnapper
+    tar deg til en /"emnenavn" rute, som vil vise en Emne-komponent
