@@ -26,6 +26,7 @@ function Home() {
                     <h2>Interesser:</h2>
                     <ul className="interesse-liste">
                         <li><InteresseKnapp navn="programmering" /></li>
+                        <li><InteresseKnapp navn="geografi" /></li>
                     </ul>
                 </div>
             </div>

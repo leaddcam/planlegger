@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Startside from './pages/Startside';
 import Emne from './pages/Emne';
 import Interesse from './pages/Interesse';
+import Notatblokk from './pages/Notatblokk';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/emne/:emnekode" element={<Emne />} />
         <Route path="/interesse/:navn" element={<Interesse />} />
+        <Route path="/interesse/:navn/notater" element={<Notatblokk />} />
       </Routes>
     </Router>
   )

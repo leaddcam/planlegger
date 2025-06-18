@@ -1,5 +1,6 @@
 import {useParams} from 'react-router-dom';
 import '../styles/Interesse.css';
+import NotatKnapp from '../components/NotatKnapp';
 
 
 
@@ -12,7 +13,7 @@ function Interesse() {
   return (
     <div className="interesse-side">
         <h1>{navn}</h1>
-        <button>Notater</button>
+        <NotatKnapp/>
     </div>
   );
 }
