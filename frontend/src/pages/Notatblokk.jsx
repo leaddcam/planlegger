@@ -1,18 +1,20 @@
 import {useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import '../styles/Notatblokk.css';
 
 function Notatblokk() {
   const {navn} = useParams();
+  const naviger = useNavigate();
   const [notater, settNotater] = useState([
-    {id: 1, tittel: 'react Hooks'},
-    {id: 2, tittel: 'Event handling i JSX'}
+    {id: 1, tittel: 'MySQL'},
+    {id: 2, tittel: 'Algoritmer'},
+    {id: 3, tittel: 'Portfolio'}
   ]);
 
   const leggTilNotat = () => {
     const nyTittel = prompt("Skriv inn tittel for nytt notat: ");
     if (nyTittel) {
-      settNotater([...notater, {id: Date.now(), tittel: nyTittel}]);
+      settNotater([...notater, nyttNotat]);
     }
   };
 
@@ -22,7 +24,9 @@ function Notatblokk() {
       <ul>
         {notater.map(notat => (
           <li key={notat.id}>
-            <button>{notat.tittel}</button>
+            <button onClick={() => naviger(`/interesse/${navn}/notater/${notat.id}`, {state: {tittel: notat.tittel}})}>
+              {notat.tittel}
+            </button>
           </li>
         ))}
       </ul>
