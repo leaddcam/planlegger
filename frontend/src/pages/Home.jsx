@@ -1,9 +1,8 @@
 // hjemmesiden
 
 import React from 'react';
-import TilEmne from '../components/TilEmne';
+import {TilEmne, TilInteresse} from '../components';
 import '../styles/Home.css';
-import TilInteresse from '../components/TilInteresse';
 
 function Home() {
     return (

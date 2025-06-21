@@ -2,7 +2,7 @@
 
 import {useParams} from 'react-router-dom';
 import '../styles/Interesse.css';
-import TilNotatbok from '../components/TilNotatbok';
+import {TilNotatbok} from '../components';
 
 
 

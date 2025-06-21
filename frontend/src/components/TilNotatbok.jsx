@@ -3,11 +3,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
 function TilNotatbok() {
-  const navigate = useNavigate();
+  const naviger = useNavigate();
   const { navn } = useParams();
 
   const håndterKlikk = () => {
-    navigate(`/interesse/${navn}/notatbok`);
+    naviger(`/interesse/${navn}/notatbok`);
   };
 
   return (

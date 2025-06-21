@@ -52,7 +52,7 @@ function Notatbok() {
         <ul>
           {løseNotater.map(n => (
             <li key={n.id}>
-              <Link to={`/interesse/${navn}/notatbok/${n.id}`}>{n.tittel}</Link>
+              <Link to={`/interesse/${navn}/notatbok/notat/${n.id}`}>{n.tittel}</Link>
             </li>
           ))}
         </ul>
@@ -65,13 +65,13 @@ function Notatbok() {
         Object.entries(notatblokker).map(([blokkNavn, notater]) => (
           <div key={blokkNavn}>
             <h3>
-              <Link to={`/interesse/${navn}/notatbok/${blokkNavn}`}>{blokkNavn}</Link>
+              <Link to={`/interesse/${navn}/notatbok/blokk/${blokkNavn}`}>{blokkNavn}</Link>
             </h3>
             {notater.length > 0 ? (
               <ul>
                 {notater.map(n => (
                   <li key={n.id}>
-                    <Link to={`/interesse/${navn}/notatbok/${blokkNavn}/${n.id}`}>{n.tittel}</Link>
+                    <Link to={`/interesse/${navn}/notatbok/blokk/${blokkNavn}/notat/${n.id}`}>{n.tittel}</Link>
                   </li>
                 ))}
               </ul>
