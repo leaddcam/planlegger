@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
+
+router.get('/', (req, res) => {
+  res.json({ message: "Notater API fungerer!" });
+});
+
 // henter alle notater for en interesse
 router.get('/:interesse', (req, res) => {
     const { interesse } = req.params;

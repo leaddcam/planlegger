@@ -1,16 +1,18 @@
+// navigerer bruker til valgt Notat (page)
+
 import {useNavigate, useParams} from 'react-router-dom';
 
-function NotatKnapp() {
+function TilNotat() {
     const naviger = useNavigate();
     const {navn} = useParams(); // henter interessenavn fra URL
 
-    const handleClick = () => {naviger(`/interesse/${navn}/notater`)};
+    const handleClick = () => {naviger(`/interesse/${navn}/notatbok/:notat`)};
 
     return (
         <button onClick={handleClick}>
-            Notater
+            Notatbok
         </button>
     )
 }
 
-export default NotatKnapp;
+export default TilNotat;

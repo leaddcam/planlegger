@@ -1,10 +1,12 @@
-import '../styles/EmneKnapp.css'; // InteresseKnapp.css
+// navigerer bruker til valgt Interesse (page)
+
+import '../styles/TilEmne.css'; // InteresseKnapp.css
 import {useNavigate} from 'react-router-dom';
 
-function InteresseKnapp({navn}) {
+function TilInteresse({navn}) {
     const naviger = useNavigate();
-
     const handleClick = () => naviger(`/interesse/${navn}`);
+
     return (
         <button onClick={handleClick}>
             {navn}
@@ -12,4 +14,4 @@ function InteresseKnapp({navn}) {
     );
 }
 
-export default InteresseKnapp;
+export default TilInteresse;

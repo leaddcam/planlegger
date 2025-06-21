@@ -1,13 +1,10 @@
+// routing
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+// style
 import './App.css'
+// pages
+import {Startside, Home, Emne, Interesse, Notatbok, Notatblokk, Notat} from './pages';
 
-{/* importerer pages */}
-import Home from './pages/Home';
-import Startside from './pages/Startside';
-import Emne from './pages/Emne';
-import Interesse from './pages/Interesse';
-import Notatblokk from './pages/Notatblokk';
-import NotatSide from './pages/NotatSide';
 
 function App() {
 
@@ -18,8 +15,10 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/emne/:emnekode" element={<Emne />} />
         <Route path="/interesse/:navn" element={<Interesse />} />
-        <Route path="/interesse/:navn/notater" element={<Notatblokk />} />
-        <Route path="/interesse/:navn/notater/:notatId" element={<NotatSide />} />
+        <Route path="/interesse/:navn/notatbok" element={<Notatbok />} />
+        <Route path="/interesse/:navn/notatbok/notat/:notat" element={<Notat />} />
+        <Route path="/interesse/:navn/notatbok/blokk/:blokk" element={<Notatblokk />} />
+        <Route path="/interesse/:navn/notatbok/blokk/:blokk/notat/:notat" element={<Notat />} />
       </Routes>
     </Router>
   )

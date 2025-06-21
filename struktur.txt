@@ -1,6 +1,40 @@
-root /: 
-- knapp i midten: Home
-    tar deg til /home ruten, som vil vise Home-komponenten
-/home
-- EmneKnapper
-    tar deg til en /"emnenavn" rute, som vil vise en Emne-komponent
+Route: /
+    page: Startside
+    startside-knapp --> /home
+Route: /home
+    page: Home
+    components:
+        tilEmne --> /emne/:emnekode
+        tilInteresse --> /interesse/:navn
+Route: /emne/:emnekode
+    page: Emne
+    components: 
+        InputFelt
+Route: /interesse/:navn
+    page: Interesse
+    components: 
+        tilNotatBok --> /interesse/:navn/notatbok
+Route: /interesse/:navn/notatbok
+    page: notatbok
+    components:
+        tilNotat
+        tilNotatBlokk
+        nyttNotat
+        nyNotatBlokk
+Route: /interesse/:navn/notatbok/:notat
+    page: Notat
+    components: 
+        skrivTittel
+        notatFelt
+Route: /interesse/:navn/notatbok/:notatblokk
+    page: Notatblokk
+    components:
+        tilNotat
+        nyttNotat
+Route: /interesse/:navn/notatbok/:notatblokk/:notat
+    page: Notat
+    components: 
+        skrivTittel
+        notatFelt
+
+    

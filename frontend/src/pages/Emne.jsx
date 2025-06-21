@@ -1,3 +1,5 @@
+// page for et valgt Emne
+
 // importerer useParams for å kunne ekstrahere URL parametere
 import {useParams} from 'react-router-dom';
 import '../styles/Emne.css';

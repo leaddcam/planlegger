@@ -1,7 +1,9 @@
-import '../styles/EmneKnapp.css';
+// navigerer bruker til valgt Emne (page)
+
+import '../styles/TilEmne.css';
 import {useNavigate} from 'react-router-dom';
 
-function EmneKnapp({emne}) {
+function TilEmne({emne}) {
     const naviger = useNavigate();
 
     return (
@@ -11,4 +13,4 @@ function EmneKnapp({emne}) {
     );
 }
 
-export default EmneKnapp;
+export default TilEmne;

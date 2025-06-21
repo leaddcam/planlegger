@@ -1,11 +1,11 @@
-const mysql = rquire('mysql2'); // håndterer databasen (her: "planlegger")
+const mysql = require('mysql2'); // håndterer databasen (her: "planlegger")
 require('dotenv').config();
 
 // kobler backend til MySQL-database
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    passord: process.env.PASSORD,
+    password: process.env.PASSORD,
     database: 'planlegger'
 });
 

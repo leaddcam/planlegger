@@ -1,4 +1,4 @@
-// src/components/UrlInput.jsx
+// lar bruker lime inn URL-link
 
 import { useState } from 'react';
 import '../styles/InputFelt.css';

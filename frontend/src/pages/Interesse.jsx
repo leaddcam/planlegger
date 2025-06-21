@@ -1,6 +1,8 @@
+// page for en Interesse
+
 import {useParams} from 'react-router-dom';
 import '../styles/Interesse.css';
-import NotatKnapp from '../components/NotatKnapp';
+import TilNotatbok from '../components/TilNotatbok';
 
 
 
@@ -13,7 +15,7 @@ function Interesse() {
   return (
     <div className="interesse-side">
         <h1>{navn}</h1>
-        <NotatKnapp/>
+        <TilNotatbok />
     </div>
   );
 }
