@@ -10,7 +10,7 @@ function TilNotat({ notat }) {
 
   return (
     <button onClick={handleClick}>
-      Notat: {notat}
+      {notat}
     </button>
   );
 }

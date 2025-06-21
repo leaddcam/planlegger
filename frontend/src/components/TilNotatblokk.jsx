@@ -10,7 +10,7 @@ function TilNotatblokk({notatblokk}) {
 
     return (
         <button onClick={handleClick}>
-            Notatblokk: {notatblokk}
+            {notatblokk}
         </button>
     )
 }

@@ -1,22 +1,12 @@
 import {useState} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 import '../styles/Notatblokk.css';
+import {NyttNotat} from '../components';
 
 function Notatblokk() {
-  const {navn} = useParams();
+  const {navn, blokk} = useParams();
   const naviger = useNavigate();
-  const [notater, settNotater] = useState([
-    {id: 1, tittel: 'MySQL'},
-    {id: 2, tittel: 'Algoritmer'},
-    {id: 3, tittel: 'Portfolio'}
-  ]);
-
-  const leggTilNotat = () => {
-    const nyTittel = prompt("Skriv inn tittel for nytt notat: ");
-    if (nyTittel) {
-      settNotater([...notater, nyttNotat]);
-    }
-  };
+  const [notater, settNotater] = useState([]);
 
   return (
     <div className="notater-container">
@@ -24,13 +14,16 @@ function Notatblokk() {
       <ul>
         {notater.map(notat => (
           <li key={notat.id}>
-            <button onClick={() => naviger(`/interesse/${navn}/notater/${notat.id}`, {state: {tittel: notat.tittel}})}>
-              {notat.tittel}
+            <button 
+              onClick={() => 
+                naviger(`/interesse/${navn}/notatbok/blokk/${blokk}/notat/${notat.id}`, 
+                {state: {tittel: notat.tittel}})}>
+            {notat.tittel}
             </button>
           </li>
         ))}
       </ul>
-      <button onClick={leggTilNotat} className="legg-til-knapp">+</button>
+     <NyttNotat settNotat={settNotater} />
     </div>
   );
 }

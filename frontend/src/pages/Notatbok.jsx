@@ -1,50 +1,18 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk} from '../components';
 
 function Notatbok() {
   const { navn } = useParams();
-
-  const [løseNotater, settLøseNotater] = useState([
-    { id: 1, tittel: "Introduksjon til AI" },
-    { id: 2, tittel: "Plan for semesteret" }
-  ]);
-
-  const [notatblokker, settNotatblokker] = useState({
-    "Frontend": [
-      { id: 3, tittel: "React Grunnkurs" },
-      { id: 4, tittel: "Styled Components" }
-    ],
-    "Backend": [
-      { id: 5, tittel: "Node.js intro" }
-    ]
-  });
-
-  // ➕ Legg til nytt løst notat
-  const leggTilLøstNotat = () => {
-    const tittel = prompt("Tittel på nytt notat:");
-    if (tittel) {
-      const nyttNotat = { id: Date.now(), tittel };
-      settLøseNotater(prev => [...prev, nyttNotat]);
-    }
-  };
-
-  // 📁 Legg til ny notatblokk
-  const leggTilBlokk = () => {
-    const navnPåBlokk = prompt("Navn på ny notatblokk:");
-    if (navnPåBlokk && !notatblokker[navnPåBlokk]) {
-      settNotatblokker(prev => ({ ...prev, [navnPåBlokk]: [] }));
-    }
-  };
+  const [løseNotater, settNotat] = useState([]);
+  const [notatblokker, settNotatblokker] = useState({});
 
   return (
     <div>
-      <h1>Notatbok for interesse: {navn}</h1>
-
-      <div style={{ marginBottom: '1rem' }}>
-        <button onClick={leggTilLøstNotat}>➕ Nytt løst notat</button>
-        <button onClick={leggTilBlokk} style={{ marginLeft: '1rem' }}>
-          📁 Ny notatblokk
-        </button>
+      <h1>Notatbok for {navn}</h1>
+      <div>
+        <NyttNotat settNotat={settNotat} />
+        <NyBlokk blokk={notatblokker} settBlokk={settNotatblokker} />
       </div>
 
       <h2>Løse notater</h2>
@@ -52,7 +20,7 @@ function Notatbok() {
         <ul>
           {løseNotater.map(n => (
             <li key={n.id}>
-              <Link to={`/interesse/${navn}/notatbok/notat/${n.id}`}>{n.tittel}</Link>
+              <TilNotat notat={n.tittel} />
             </li>
           ))}
         </ul>
@@ -62,24 +30,13 @@ function Notatbok() {
 
       <h2>Notatblokker</h2>
       {Object.entries(notatblokker).length > 0 ? (
-        Object.entries(notatblokker).map(([blokkNavn, notater]) => (
-          <div key={blokkNavn}>
-            <h3>
-              <Link to={`/interesse/${navn}/notatbok/blokk/${blokkNavn}`}>{blokkNavn}</Link>
-            </h3>
-            {notater.length > 0 ? (
-              <ul>
-                {notater.map(n => (
-                  <li key={n.id}>
-                    <Link to={`/interesse/${navn}/notatbok/blokk/${blokkNavn}/notat/${n.id}`}>{n.tittel}</Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p><em>Ingen notater i denne blokken enda.</em></p>
-            )}
-          </div>
-        ))
+        <ul>
+            {Object.entries(notatblokker).map(blokkNavn => (
+                <li key={blokkNavn}>
+                    <TilNotatblokk notatblokk={blokkNavn} />
+                </li>
+            ))}
+        </ul>
       ) : (
         <p>Ingen notatblokker ennå.</p>
       )}
