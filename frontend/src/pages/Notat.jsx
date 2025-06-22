@@ -1,21 +1,39 @@
-import {useParams} from 'react-router-dom';
-import {useState} from 'react';
-import {lagreNotat} from '../api/notater';
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { lagreNotat, oppdaterNotat, hentNotatMedId } from '../api/notater';
 import '../styles/Notat.css';
 
-function NotatSide() {
-  const { navn, notatId } = useParams();
-  const [innhold, settInnhold] = useState('');
+function Notat() {
+  const { navn, notatId, blokk } = useParams();
   const [tittel, settTittel] = useState('');
+  const [innhold, settInnhold] = useState('');
+
+  // Henter eksisterende notat hvis det finnes
+  useEffect(() => {
+    async function hent() {
+      if (!notatId || isNaN(Number(notatId))) return;
+
+      try {
+        const notat = await hentNotatMedId(notatId);
+        settTittel(notat.tittel);
+        settInnhold(notat.innhold);
+      } catch (err) {
+        console.error('Feil ved henting:', err);
+      }
+    }
+
+    hent();
+  }, [notatId]);
 
   const handleLagre = async () => {
     try {
-      await lagreNotat({
-        interesse: navn,
-        tittel: tittel || `Notat ${notatId}`,
-        innhold
-      });
-      alert('Notatet er lagret!');
+      if (notatId && !isNaN(Number(notatId))) {
+        await oppdaterNotat(notatId, { tittel, innhold });
+        alert('Notatet ble oppdatert!');
+      } else {
+        await lagreNotat({ interesse: navn, tittel, innhold, blokk });
+        alert('Notatet ble opprettet!');
+      }
     } catch (err) {
       alert('Feil ved lagring: ' + err.message);
     }
@@ -34,7 +52,7 @@ function NotatSide() {
         className="notat-textarea"
         value={innhold}
         onChange={e => settInnhold(e.target.value)}
-        rows={10}
+        rows={12}
         cols={50}
         placeholder="Skriv notatet her..."
       />
@@ -44,5 +62,6 @@ function NotatSide() {
   );
 }
 
-export default NotatSide;
+export default Notat;
+
 
