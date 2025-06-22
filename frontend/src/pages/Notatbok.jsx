@@ -16,7 +16,7 @@ function Notatbok() {
         {/* Left side: Løse notater + NyttNotat */}
         <div className="list-wrapper">
             <div className="list-header">
-            <h2>Løse notater</h2>
+            <h2>Løse sider</h2>
             <NyttNotat settNotat={settNotat} />
             </div>
 
@@ -36,7 +36,7 @@ function Notatbok() {
         {/* Right side: Notatblokker + NyBlokk */}
         <div className="list-wrapper">
             <div className="list-header">
-            <h2>Notatblokker</h2>
+            <h2>Seksjoner</h2>
             <NyBlokk blokk={notatblokker} settBlokk={settNotatblokker} />
             </div>
 
