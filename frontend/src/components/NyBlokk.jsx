@@ -1,3 +1,5 @@
+import '../styles/NyBlokk.css';
+
 function NyBlokk({ blokk, settBlokk }) {
   const leggTilBlokk = () => {
     const navn = prompt("Ny blokk:");
@@ -7,7 +9,7 @@ function NyBlokk({ blokk, settBlokk }) {
   };
 
   return (
-    <button onClick={leggTilBlokk}>📁 Ny notatblokk</button>
+    <button onClick={leggTilBlokk} className="ny-blokk">📁</button>
   );
 }
 

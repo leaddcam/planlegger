@@ -1,3 +1,5 @@
+import '../styles/NyttNotat.css';
+
 function NyttNotat({ settNotat }) {
   const leggTilNotat = () => {
     const tittel = prompt("Nytt notat:");
@@ -8,7 +10,7 @@ function NyttNotat({ settNotat }) {
   };
 
   return (
-    <button onClick={leggTilNotat}>➕ Nytt løst notat</button>
+    <button onClick={leggTilNotat} className="nytt-notat">📝</button>
   );
 }
 

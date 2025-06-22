@@ -10,7 +10,7 @@ function Notatblokk() {
 
   return (
     <div className="notater-container">
-      <h1>Notatblokk for {navn}</h1>
+      <h1>{blokk}</h1>
       <ul>
         {notater.map(notat => (
           <li key={notat.id}>

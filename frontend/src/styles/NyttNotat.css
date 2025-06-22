@@ -1,0 +1,23 @@
+.nytt-notat {
+    background-color: rgb(30, 205, 97);
+    color: rgb(255, 255, 255);
+    font-family: monospace;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;;
+    cursor: pointer;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    padding: 0;
+    transform: translateY(0px);
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease; 
+}
+
+.nytt-notat:hover {
+    background-color: #27ae60;
+}

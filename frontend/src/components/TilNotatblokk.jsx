@@ -1,6 +1,6 @@
 // navigerer bruker til valgt Notatblokk (page)
-
 import {useNavigate, useParams} from 'react-router-dom';
+import '../styles/TilNotatblokk.css';
 
 function TilNotatblokk({notatblokk}) {
     const naviger = useNavigate();
@@ -9,7 +9,7 @@ function TilNotatblokk({notatblokk}) {
     const handleClick = () => {naviger(`/interesse/${navn}/notatbok/blokk/${notatblokk}`)};
 
     return (
-        <button onClick={handleClick}>
+        <button onClick={handleClick} className="til-blokk">
             {notatblokk}
         </button>
     )
