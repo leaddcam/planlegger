@@ -14,7 +14,7 @@ function Interesse() {
 
   return (
     <div className="interesse-side">
-        <h1>{navn}</h1>
+        <h1 className="navn">{navn}</h1>
         <TilNotatbok />
     </div>
   );

@@ -1,6 +1,7 @@
 import {useParams} from 'react-router-dom';
 import {useState} from 'react';
 import {lagreNotat} from '../api/notater';
+import '../styles/Notat.css';
 
 function NotatSide() {
   const { navn, notatId } = useParams();
@@ -21,15 +22,16 @@ function NotatSide() {
   };
 
   return (
-    <div>
-      <h1>Notat for {navn}</h1>
+    <div className="notat-editor">
       <input
+        className="notat-input"
         type="text"
         value={tittel}
         onChange={e => settTittel(e.target.value)}
         placeholder="Tittel"
       />
       <textarea
+        className="notat-textarea"
         value={innhold}
         onChange={e => settInnhold(e.target.value)}
         rows={10}
@@ -37,7 +39,7 @@ function NotatSide() {
         placeholder="Skriv notatet her..."
       />
       <br />
-      <button onClick={handleLagre}>Lagre</button>
+      <button onClick={handleLagre} className="lagre-knapp">Lagre</button>
     </div>
   );
 }

@@ -7,9 +7,12 @@ function Startside() {
 
     return (
         <div className="startside">
-            <button className="startside-knapp" onClick={() => naviger('/home')}>
-            Hjemmeside
-        </button>
+            <button className="login" onClick={() => naviger('/home')}>
+                Logg inn
+            </button>
+            <button className="signup" onClick={() => alert("ingen bruker?")}>
+                Registrer bruker
+            </button>
         </div>
     )
 }

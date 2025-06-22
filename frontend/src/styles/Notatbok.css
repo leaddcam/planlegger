@@ -2,6 +2,7 @@
   display: flex;
   gap: 40px;          /* space between the two list columns */
   align-items: flex-start;  /* align lists at the top */
+  padding: 2rem 1.75rem;
 }
 
 .list-wrapper {
@@ -13,6 +14,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  padding: 2rem;
 }
 
 .notat-list {
