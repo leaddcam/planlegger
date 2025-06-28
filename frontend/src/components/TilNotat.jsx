@@ -2,21 +2,21 @@
 import {useNavigate, useParams} from 'react-router-dom';
 import '../styles/TilNotat.css';
 
-function TilNotat({ notat, blokk }) {
+function TilNotat({notat, blokkId}) {
   const naviger = useNavigate();
-  const { navn } = useParams();
+  const { interesse } = useParams();
 
   const handleClick = () => {
-    if (blokk) {
-        naviger(`/interesse/${navn}/notatbok/blokk/${blokk}/notat/${notat}`)
+    if (blokk!==null) {
+        naviger(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${notat.id}`)
     } else {
-        naviger(`/interesse/${navn}/notatbok/notat/${notat}`);
+        naviger(`/interesse/${interesse}/notatbok/notat/${notat.id}`);
     }
   };
   
   return (
     <button onClick={handleClick} className="til-notat">
-      {notat}
+      {notat.tittel}
     </button>
   );
 }

@@ -1,41 +1,59 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { lagreNotat, oppdaterNotat, hentNotatMedId } from '../api/notater';
+import { lagreNotat, oppdaterNotat, hentNotatMedId } from '../api/notatbok';
 import '../styles/Notat.css';
 
 function Notat() {
-  const { navn, notatId, blokk } = useParams();
+  const { interesse, notatId, blokkId } = useParams();
+  const navigate = useNavigate();
   const [tittel, settTittel] = useState('');
   const [innhold, settInnhold] = useState('');
+  const eksisterer = notatId && !isNaN(Number(notatId));
 
-  // Henter eksisterende notat hvis det finnes
   useEffect(() => {
-    async function hent() {
-      if (!notatId || isNaN(Number(notatId))) return;
+    if (!eksisterer) return;
 
+    async function hent() {
       try {
         const notat = await hentNotatMedId(notatId);
+        if (notat == undefined) {
+          console.warn('Fant ikke notat med id ', notatId);
+        }
         settTittel(notat.tittel);
         settInnhold(notat.innhold);
       } catch (err) {
         console.error('Feil ved henting:', err);
       }
     }
-
     hent();
   }, [notatId]);
 
-  const handleLagre = async () => {
+  const handleTilbake = async () => {
     try {
-      if (notatId && !isNaN(Number(notatId))) {
+      if (eksisterer) {
+        // Oppdater eksisterende notat
         await oppdaterNotat(notatId, { tittel, innhold });
-        alert('Notatet ble oppdatert!');
       } else {
-        await lagreNotat({ interesse: navn, tittel, innhold, blokk });
-        alert('Notatet ble opprettet!');
+        // Lagre nytt notat og få tilbake id
+        const nyttNotat = await lagreNotat({ interesse, tittel, innhold, blokkId });
+        // Naviger til den nye notatens side med id
+        if (blokk===null) {
+          navigate(`/interesse/${interesse}/notatbok/notat/${nyttNotat.id}`);
+        } else {
+          navigate(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${nyttNotat.id}`);
+        }
+        return; // Viktig å returnere så ikke navigerer to ganger
+      }
+
+      // Naviger tilbake til notatbok eller blokk
+      if (blokkId) {
+        navigate(`/interesse/${interesse}/notatbok/blokk/${blokkId}`);
+      } else {
+        navigate(`/interesse/${interesse}/notatbok`);
       }
     } catch (err) {
-      alert('Feil ved lagring: ' + err.message);
+      alert('Kunne ikke lagre notatet.');
+      console.error('Feil ved lagring:', err);
     }
   };
 
@@ -57,11 +75,14 @@ function Notat() {
         placeholder="Skriv notatet her..."
       />
       <br />
-      <button onClick={handleLagre} className="lagre-knapp">Lagre</button>
+      <button onClick={handleTilbake} className="tilbake-knapp">
+        ← Tilbake
+      </button>
     </div>
   );
 }
 
 export default Notat;
+
 
 

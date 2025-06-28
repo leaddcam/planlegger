@@ -4,10 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function TilNotatbok() {
   const naviger = useNavigate();
-  const { navn } = useParams();
+  const { interesse } = useParams();
 
   const håndterKlikk = () => {
-    naviger(`/interesse/${navn}/notatbok`);
+    naviger(`/interesse/${interesse}/notatbok`);
   };
 
   return (

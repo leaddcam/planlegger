@@ -3,19 +3,20 @@ import { useState, useEffect } from 'react';
 import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk} from '../components';
 import '../styles/Notatbok.css';
 // hente notater fra database
-import {hentNotater} from '../api/notater';
+import {hentNotater} from '../api/notatbok';
 
 function Notatbok() {
-  const { navn } = useParams();
+  const { interesse } = useParams();
   const [løseNotater, settNotat] = useState([]);
   const [notatblokker, settNotatblokker] = useState({});
   // henter lagrede notater fra databasen når komponenten lastes
   useEffect(() => {
     async function hent() {
       try {
-        const data = await hentNotater(navn); // henter alle notater tilknyttet interessen
+        const data = await hentNotater(interesse); // henter alle notater tilknyttet interessen
         // sjekker at funksjonen returnerer notat
         console.log("Alle hentede notater: ", data);
+        console.log("Interesse: ", interesse);
 
         // deler opp i løse og blokk-tilhørende notater
         const løse = [];
@@ -40,11 +41,11 @@ function Notatbok() {
     }
 
     hent();
-  }, [navn]);
+  }, [interesse]);
 
   return (
     <div>
-        <h1>Notatbok for {navn}</h1>
+        <h1>Notatbok for {interesse}</h1>
 
         <div className="lists-container">
         {/* Løse notater + NyttNotat */}
@@ -56,7 +57,7 @@ function Notatbok() {
             <ul className="notat-list">
                 {løseNotater.map(n => (
                 <li key={n.id} className="notat-item">
-                    <TilNotat notat={n.tittel} />
+                    <TilNotat notat={n} blokk={n.blokk}/>
                 </li>
                 ))}
             </ul>
@@ -69,9 +70,9 @@ function Notatbok() {
             <NyBlokk blokk={notatblokker} settBlokk={settNotatblokker} />
             </div>
             <ul className="notat-list">
-                {Object.entries(notatblokker).map(([blokkNavn]) => (
+                {Object.entries(notatblokker).map(([blokkNavn, notater]) => (
                 <li key={blokkNavn} className="notat-item">
-                    <TilNotatblokk notatblokk={blokkNavn} />
+                    <TilNotatblokk notatblokk={blokkNavn} notater={notater}/>
                 </li>
                 ))}
             </ul>

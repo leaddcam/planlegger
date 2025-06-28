@@ -14,11 +14,11 @@ function App() {
         <Route path="/" element={<Startside />} />
         <Route path="/home" element={<Home />} />
         <Route path="/emne/:emnekode" element={<Emne />} />
-        <Route path="/interesse/:navn" element={<Interesse />} />
-        <Route path="/interesse/:navn/notatbok" element={<Notatbok />} />
-        <Route path="/interesse/:navn/notatbok/notat/:notat" element={<Notat />} />
-        <Route path="/interesse/:navn/notatbok/blokk/:blokk" element={<Notatblokk />} />
-        <Route path="/interesse/:navn/notatbok/blokk/:blokk/notat/:notat" element={<Notat />} />
+        <Route path="/interesse/:interesse" element={<Interesse />} />
+        <Route path="/interesse/:interesse/notatbok" element={<Notatbok />} />
+        <Route path="/interesse/:interesse/notatbok/notat/:notatId" element={<Notat />} />
+        <Route path="/interesse/:interesse/notatbok/blokk/:blokkId" element={<Notatblokk />} />
+        <Route path="/interesse/:interesse/notatbok/blokk/:blokkId/notat/:notatId" element={<Notat />} />
       </Routes>
     </Router>
   )

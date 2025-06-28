@@ -2,17 +2,18 @@ import {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import '../styles/Notatblokk.css';
 import {NyttNotat, TilNotat} from '../components';
-import {hentNotater} from '../api/notater';
+import {hentNotater} from '../api/notatbok';
 
 function Notatblokk() {
-  const {navn, blokk} = useParams();
+  const {interesse, blokk} = useParams();
   const [notater, settNotater] = useState([]);
 
     useEffect(() => {
     async function hent() {
       try {
-        const alleNotater = await hentNotater(navn);
-        const blokkNotater = alleNotater.filter(n => n.blokk === blokk);
+        const alleNotater = await hentNotater(interesse);
+        const blokkId = Number(blokk);
+        const blokkNotater = alleNotater.filter(n => n.blokk === blokkId);
         settNotater(blokkNotater);
       } catch (err) {
         console.error('Feil ved henting av notater:', err);
@@ -20,7 +21,7 @@ function Notatblokk() {
     }
 
     hent();
-  }, [navn, blokk]);
+  }, [interesse, blokk]);
 
 
   return (

@@ -26,8 +26,8 @@ function Home() {
                 <div className="liste-seksjon">
                     <h2>Interesser:</h2>
                     <ul className="interesse-liste">
-                        <li><TilInteresse navn="programmering" /></li>
-                        <li><TilInteresse navn="geografi" /></li>
+                        <li><TilInteresse interesse="programmering" /></li>
+                        <li><TilInteresse interesse="geografi" /></li>
                     </ul>
                 </div>
             </div>
