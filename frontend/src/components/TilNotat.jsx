@@ -7,10 +7,10 @@ function TilNotat({notat, blokkId}) {
   const { interesse } = useParams();
 
   const handleClick = () => {
-    if (blokk!==null) {
-        naviger(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${notat.id}`)
+    if (isNaN(blokkId)) {
+        naviger(`/interesse/${interesse}/notatbok/notat/${notat.notatId}`)
     } else {
-        naviger(`/interesse/${interesse}/notatbok/notat/${notat.id}`);
+        naviger(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${notat.notatId}`);
     }
   };
   

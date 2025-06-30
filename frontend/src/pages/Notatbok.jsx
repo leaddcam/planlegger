@@ -23,13 +23,13 @@ function Notatbok() {
         const blokker = {};
 
         data.forEach(notat => {
-          if (!notat.blokk) {
+          if (!notat.blokkId) {
             løse.push(notat);
           } else {
-            if (!blokker[notat.blokk]) {
-              blokker[notat.blokk] = [];
+            if (!blokker[notat.blokkId]) {
+              blokker[notat.blokkId] = [];
             }
-            blokker[notat.blokk].push(notat);
+            blokker[notat.blokkId].push(notat);
           }
         });
 
@@ -56,8 +56,8 @@ function Notatbok() {
             </div>
             <ul className="notat-list">
                 {løseNotater.map(n => (
-                <li key={n.id} className="notat-item">
-                    <TilNotat notat={n} blokk={n.blokk}/>
+                <li key={n.notatId} className="notat-item">
+                    <TilNotat notat={n} blokk={n.blokkId}/>
                 </li>
                 ))}
             </ul>

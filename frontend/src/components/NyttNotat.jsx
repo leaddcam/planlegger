@@ -13,18 +13,13 @@ function NyttNotat({ interesse: propInteresse, blokkId }) {
   const lagreMedTittel = async (tittel) => {
     try {
       console.log("Notat: ", {interesse, tittel, blokkId});
-      const nyttNotat = await lagreNotat({
-        interesse,
-        tittel,
-        innhold: '',
-        blokkId,
-      });
+      const nyttNotat = await lagreNotat({interesse, tittel, innhold: '', blokkId});
 
       // Naviger etter lagring
-      if (blokk !== null) {
-        navigate(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${nyttNotat.id}`);
+      if (!isNaN(blokkId) && blokkId !== null && blokkId !== undefined) {
+        navigate(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${nyttNotat.notatId}`);
       } else {
-        navigate(`/interesse/${interesse}/notatbok/notat/${nyttNotat.id}`);
+        navigate(`/interesse/${interesse}/notatbok/notat/${nyttNotat.notatId}`);
       }
     } catch (error) {
       alert("Feil ved lagring av notatet.");

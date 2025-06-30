@@ -31,10 +31,34 @@
   font-family: inherit;
 }
 
+.knappe-container {
+  display: flex;
+  justify-content: center; /* Justerer knappene mot høyre */
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 500px;
+  align-self: stretch;
+}
+
+.tilbake-knapp {
+  padding: 0.6rem 1.2rem;
+  background-color: #ccc;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.tilbake-knapp:hover {
+  background-color: #bbb;
+}
+
 .lagre-knapp {
   background-color: #4caf50;
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border: none;
   border-radius: 8px;
@@ -46,12 +70,4 @@
   background-color: #45a049;
 }
 
-.tilbake-knapp {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #ccc;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
 
