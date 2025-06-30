@@ -2,10 +2,10 @@ import {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import '../styles/Notatblokk.css';
 import {NyttNotat, TilNotat} from '../components';
-import {hentNotater, hentNotatblokk} from '../api/notatbok';
+import {hentNotater, hentNotatblokk} from '../api/notater';
 
 function Notatblokk() {
-  const {interesse, blokk} = useParams();
+  const {interesse, blokkId} = useParams();
   const [notater, settNotater] = useState([]);
   const [blokkNavn, settBlokkNavn] = useState("");
 
@@ -13,11 +13,11 @@ function Notatblokk() {
     async function hentData() {
       try {
         const alleNotater = await hentNotater(interesse);
-        const blokkId = Number(blokk);
-        const blokkNotater = alleNotater.filter(n => n.blokkId === blokkId);
+        const blokkIdNum = Number(blokkId);
+        const blokkNotater = alleNotater.filter(n => n.blokkId === blokkIdNum);
         settNotater(blokkNotater);
 
-        const blokkInfo = await hentNotatblokk(blokkId);
+        const blokkInfo = await hentNotatblokk(blokkIdNum);
         settBlokkNavn(blokkInfo.navn);
       } catch (err) {
         console.error('Feil ved henting av data til notatblokk:', err);
@@ -25,15 +25,15 @@ function Notatblokk() {
     }
 
     hentData();
-  }, [interesse, blokk]);
+  }, [interesse, blokkId]);
 
   return (
     <div className="notater-container">
       <h1>Blokk: {blokkNavn}</h1>
-      <NyttNotat settNotat={settNotater} blokk={Number(blokk)} />
+      <NyttNotat settNotat={settNotater} blokk={Number(blokkId)} />
       <ul>
         {notater.map(notat => (
-          <li key={notat.id}>
+          <li key={notat.notatId}>
             <TilNotat notat={notat} blokk={notat.blokkId} />
           </li>
         ))}

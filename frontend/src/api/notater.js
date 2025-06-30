@@ -1,9 +1,24 @@
-const BASE_URL = 'http://localhost:3000/api/notatbok';
+const BASE_URL = 'http://localhost:3000/api/notater';
 
 export async function hentNotater(interesse) {
-  const res = await fetch(`${BASE_URL}/${interesse}`);
-  return res.json();
+  console.log("Kaller API for:", `${BASE_URL}/${interesse}`);
+  try {
+    const res = await fetch(`${BASE_URL}/${interesse}`);
+    
+    if (!res.ok) {
+      console.error("Feil fra serveren:", res.status, await res.text());
+      return [];
+    }
+
+    const json = await res.json();
+    console.log("JSON mottatt:", json);
+    return json;
+  } catch (err) {
+    console.error("Feil under fetch:", err);
+    return [];
+  }
 }
+
 
 export async function hentNotatMedId(id) {
   const res = await fetch(`${BASE_URL}/id/${id}`);
@@ -41,17 +56,6 @@ export async function oppdaterNotat(id, { tittel, innhold }) {
     return res.json();
 }
 
-export async function hentNotatblokk(blokkId) {
-  try {
-    const respons = await fetch(`http://localhost:3001/api/notater/notatblokk/${blokkId}`);
-    if (!respons.ok) {
-      throw new Error('Kunne ikke hente notatblokk');
-    }
-    const data = await respons.json();
-    return data;
-  } catch (err) {
-    console.error('Feil i hentNotatblokk:', err);
-    throw err;
-  }
-}
+
+
 

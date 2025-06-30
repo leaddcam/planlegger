@@ -7,8 +7,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const notaterRoutes = require('./routes/notatbok');
-app.use('/api/notatbok', notaterRoutes);
+// håndtering av løse notater
+const notaterRoutes = require('./routes/notater');
+app.use('/api/notater', notaterRoutes);
+
+// håndtering av blokker og notater i blokker
+const notatblokkerRoutes = require('./routes/notatblokker');
+app.use('/api/notatblokker', notatblokkerRoutes);
 
 
 const PORT = 3000;

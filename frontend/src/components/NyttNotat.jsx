@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'; 
-import { lagreNotat } from '../api/notatbok';
+import { lagreNotat } from '../api/notater';
 import NyttNotatModal from './NyttNotatModal';
 import '../styles/NyttNotat.css';
 
-function NyttNotat({ interesse: propInteresse, blokkId }) {
+function NyttNotat({ interesse: propInteresse, blokkId, settNotat }) {
   const [visModal, settVisModal] = useState(false);
   const navigate = useNavigate();
   const { interesse: urlInteresse } = useParams(); // henter fra URL
@@ -15,6 +15,10 @@ function NyttNotat({ interesse: propInteresse, blokkId }) {
       console.log("Notat: ", {interesse, tittel, blokkId});
       const nyttNotat = await lagreNotat({interesse, tittel, innhold: '', blokkId});
 
+      // oppdaterer listen i Notatblokk-siden
+      if (settNotat) {
+        settNotat(prev => [...prev,nyttNotat]);
+      }
       // Naviger etter lagring
       if (!isNaN(blokkId) && blokkId !== null && blokkId !== undefined) {
         navigate(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${nyttNotat.notatId}`);
