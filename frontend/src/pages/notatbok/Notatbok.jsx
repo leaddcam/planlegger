@@ -4,6 +4,7 @@ import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk} from '../../components';
 import '../../styles/Notatbok.css';
 // hente notater fra database
 import {hentNotater} from '../../api/notater';
+import {hentNotatblokker} from '../../api/notatblokker';
 
 function Notatbok() {
   console.log("Notatbok-komponenten rendres!");

@@ -28,3 +28,17 @@ export async function lagreNotatblokk({ interesse, navn }) {
 
   return res.json(); // { blokkId, navn }
 }
+
+export async function hentNotatblokker(interesse) {
+  try {
+    const respons = await fetch(`${BASE_URL}/blokker/${interesse}`);
+    if (!respons.ok) {
+      throw new Error('Kunne ikke hente notatblokker');
+    }
+    const data = await respons.json(); // forventer f.eks. [{ blokkId: 1, navn: 'Intro' }, ...]
+    return data;
+  } catch (err) {
+    console.error('Feil i hentNotatblokker:', err);
+    throw err;
+  }
+}
