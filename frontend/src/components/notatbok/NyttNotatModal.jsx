@@ -1,6 +1,6 @@
 // src/components/NyttNotatModal.jsx
 import { useState } from "react";
-import "../styles/NyttNotatModal.css";
+import "../../styles/NyttNotatModal.css";
 
 function NyttNotatModal({ onLukk, onLagre }) {
   const [tittel, settTittel] = useState("");

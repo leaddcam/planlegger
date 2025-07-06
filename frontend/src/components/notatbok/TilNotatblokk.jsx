@@ -1,6 +1,6 @@
 // navigerer bruker til valgt Notatblokk (page)
 import {useNavigate, useParams} from 'react-router-dom';
-import '../styles/TilNotatblokk.css';
+import '../../styles/TilNotatblokk.css';
 
 function TilNotatblokk({notatblokk}) {
     const naviger = useNavigate();

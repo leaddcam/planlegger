@@ -19,7 +19,7 @@ function Home() {
                         <li><TilEmne emne='IN2031' /></li>
                         <li><TilEmne emne='IN2090' /></li>
                         <li><TilEmne emne='IN2120' /></li>
-                        <li><TilEmne emne='ECON1210' /></li>
+                        <li><TilEmne emne='IN2040' /></li>
                     </ul>
                 </div>
 
@@ -28,6 +28,7 @@ function Home() {
                     <ul className="interesse-liste">
                         <li><TilInteresse interesse="programmering" /></li>
                         <li><TilInteresse interesse="geografi" /></li>
+                        <li><TilInteresse interesse="progresjon" /></li>
                     </ul>
                 </div>
             </div>

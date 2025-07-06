@@ -1,8 +1,9 @@
 import {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
-import '../styles/Notatblokk.css';
-import {NyttNotat, TilNotat} from '../components';
-import {hentNotater, hentNotatblokk} from '../api/notater';
+import '../../styles/Notatblokk.css';
+import {NyttNotat, TilNotat} from '../../components';
+import {hentNotatblokk} from '../../api/notatblokker';
+import {hentNotater} from '../../api/notater';
 
 function Notatblokk() {
   const {interesse, blokkId} = useParams();

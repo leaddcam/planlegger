@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'; 
-import { lagreNotat } from '../api/notater';
+import { lagreNotat } from '../../api/notater';
 import NyttNotatModal from './NyttNotatModal';
-import '../styles/NyttNotat.css';
+import '../../styles/NyttNotat.css';
 
 function NyttNotat({ interesse: propInteresse, blokkId, settNotat }) {
   const [visModal, settVisModal] = useState(false);

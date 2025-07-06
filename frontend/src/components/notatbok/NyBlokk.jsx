@@ -1,6 +1,6 @@
-import '../styles/NyBlokk.css';
+import '../../styles/NyBlokk.css';
 import { useState } from 'react';
-import { lagreNotatblokk } from '../api/notater'; 
+import { lagreNotatblokk } from '../../api/notatblokker'; 
 
 function NyBlokk({ blokk, settBlokk, interesse }) {
   const [venter, settVenter] = useState(false);

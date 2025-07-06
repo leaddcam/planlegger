@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk} from '../components';
-import '../styles/Notatbok.css';
+import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk} from '../../components';
+import '../../styles/Notatbok.css';
 // hente notater fra database
-import {hentNotater} from '../api/notater';
+import {hentNotater} from '../../api/notater';
 
 function Notatbok() {
   console.log("Notatbok-komponenten rendres!");

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { hentNotatMedId, lagreNotat, oppdaterNotat } from '../api/notater';
-import '../styles/Notat.css';
+import { hentNotatMedId, lagreNotat, oppdaterNotat } from '../../api/notater';
+import '../../styles/Notat.css';
 
 function Notat() {
   const { interesse, notatId, blokkId } = useParams();
