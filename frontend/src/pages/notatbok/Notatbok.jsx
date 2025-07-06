@@ -23,7 +23,7 @@ function Notatbok() {
         console.log("Interesse: ", interesse);
 
         // deler opp i løse og blokk-tilhørende notater
-        const løse = data.filter(n => n.blokkId === null);
+        const løse = [];
         const blokker = {};
 
         data.forEach(notat => {
