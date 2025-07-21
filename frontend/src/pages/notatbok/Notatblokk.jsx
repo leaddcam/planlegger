@@ -6,7 +6,7 @@ import {hentNotatblokk} from '../../api/notatblokker';
 import {hentNotater} from '../../api/notater';
 
 function Notatblokk() {
-  const {interesse, blokkId} = useParams();
+  const {interesse, blokkId: blokkID} = useParams();
   const [notater, settNotater] = useState([]);
   const [blokkNavn, settBlokkNavn] = useState("");
 
@@ -14,8 +14,11 @@ function Notatblokk() {
     async function hentData() {
       try {
         const alleNotater = await hentNotater(interesse);
-        const blokkIdNum = Number(blokkId);
+        console.log("blokkid:", blokkID);
+        const blokkIdNum = Number(blokkID);
+        console.log("renset blokkid:", blokkIdNum);
         const blokkNotater = alleNotater.filter(n => n.blokkId === blokkIdNum);
+        console.log(blokkNotater);
         settNotater(blokkNotater);
 
         const blokkInfo = await hentNotatblokk(blokkIdNum);
@@ -26,12 +29,12 @@ function Notatblokk() {
     }
 
     hentData();
-  }, [interesse, blokkId]);
+  }, [interesse, blokkID]);
 
   return (
     <div className="notater-container">
       <h1>Blokk: {blokkNavn}</h1>
-      <NyttNotat settNotat={settNotater} blokk={Number(blokkId)} />
+        <NyttNotat settNotat={settNotater} blokkId={Number(blokkID)} />
       <ul>
         {notater.map(notat => (
           <li key={notat.notatId}>

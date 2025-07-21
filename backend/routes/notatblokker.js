@@ -5,6 +5,28 @@ const db = require('../db');
 // svarer på http://localhost:3000/api/notatblokker
 //
 
+// Øker antall_notater med 1
+router.post('/oppdater-antall/:blokkId', async (req, res) => {
+  const blokkId = req.params.blokkId;
+
+  try {
+    const [result] = await db.query(
+      'UPDATE notatblokker SET antall_notater = antall_notater + 1 WHERE blokkId = ?',
+      [blokkId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ melding: 'Notatblokk ikke funnet' });
+    }
+
+    res.json({ melding: 'Notatblokk oppdatert' });
+  } catch (err) {
+    console.error('Feil ved oppdatering av antall_notater:', err);
+    res.status(500).json({ melding: 'Serverfeil' });
+  }
+});
+
+
 // legger til notatblokk i notatblokker
 router.post('/blokker', async (req, res) => {
   const { interesse, navn } = req.body;
