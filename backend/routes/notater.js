@@ -35,8 +35,6 @@ router.post('/', async (req, res) => {
 //  Henter alle notater for en interesse
 router.get('/:interesse', async (req, res) => {
   const { interesse } = req.params;
-  console.log("🔍 Mottatt GET-forespørsel for interesse:", interesse);
-
   try {
     const [result] = await db.query('SELECT * FROM notater WHERE interesse = ?', [interesse]);
     res.json(result);
