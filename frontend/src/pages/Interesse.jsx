@@ -2,7 +2,7 @@
 
 import {useParams} from 'react-router-dom';
 import '../styles/Interesse.css';
-import {TilNotatbok} from '../components';
+import {TilNotatbok, TilHjem} from '../components';
 
 
 
@@ -13,10 +13,13 @@ function Interesse() {
   // en side med en NotatKnapp
 
   return (
+    <>
+    <TilHjem />
     <div className="interesse-side">
         <h1 className="navn">{navn}</h1>
         <TilNotatbok />
     </div>
+    </>
   );
 }
 

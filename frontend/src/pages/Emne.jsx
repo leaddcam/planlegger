@@ -3,6 +3,7 @@
 // importerer useParams for å kunne ekstrahere URL parametere
 import {useParams} from 'react-router-dom';
 import '../styles/Emne.css';
+import {TilHjem} from '../components';
 import InputFelt from '../components/InputFelt'
 
 // emneData: objekt som holder emne-spsifikk data
@@ -26,6 +27,8 @@ function Emne() {
   const erIFIKode = emnekode.includes("IN");
 
   return (
+    <>
+    <TilHjem />
     <div className="emne-container">
       <h1>{current.title}</h1>
       {erIFIKode? (
@@ -36,6 +39,7 @@ function Emne() {
         <InputFelt />
       )}
     </div>
+    </>
   );
 }
 

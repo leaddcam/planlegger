@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import '../../styles/Notatblokk.css';
-import {NyttNotat, TilNotat} from '../../components';
+import {NyttNotat, TilNotat, UtAvBlokk} from '../../components';
 import {hentNotatblokk} from '../../api/notatblokker';
 import {hentNotater} from '../../api/notater';
 
@@ -32,9 +32,13 @@ function Notatblokk() {
   }, [interesse, blokkIdNum]);
 
   return (
+    <>
+    <UtAvBlokk />
     <div className="notater-container">
       <h1>Blokk: {blokkNavn || "Ukjent blokk"}</h1>
-        <NyttNotat interesse={interesse} settNotat={settNotater} blokkId={blokkIdNum} />
+        <div className="knapper">
+          <NyttNotat interesse={interesse} settNotat={settNotater} blokkId={blokkIdNum} />
+        </div>
       <ul>
         {notater.map(notat => (
           <li key={notat.notatId}>
@@ -43,6 +47,7 @@ function Notatblokk() {
         ))}
       </ul>
     </div>
+    </>
   );
 }
 

@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk} from '../../components';
+import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk, Oversikt} from '../../components';
 import '../../styles/Notatbok.css';
 // hente notater fra database
 import {hentNotater} from '../../api/notater';
@@ -49,6 +49,7 @@ function Notatbok() {
 
   return (
     <div>
+      <Oversikt />
       <h1>Notatbok for {interesse}</h1>
 
       <div className="lists-container">

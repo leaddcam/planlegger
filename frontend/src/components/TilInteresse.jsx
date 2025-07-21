@@ -1,5 +1,3 @@
-// navigerer bruker til valgt Interesse (page)
-
 import '../styles/TilEmne.css'; // InteresseKnapp.css
 import {useNavigate} from 'react-router-dom';
 

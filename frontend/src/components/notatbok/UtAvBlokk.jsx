@@ -2,7 +2,7 @@
 import '../../styles/TilNotatbok.css';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function TilNotatbok() {
+function UtAvBlokk() {
   const naviger = useNavigate();
   const { interesse } = useParams();
 
@@ -12,9 +12,9 @@ function TilNotatbok() {
 
   return (
     <button className="knapp" onClick={onClick}>
-      &#128214;
+      ←
     </button>
   );
 }
 
-export default TilNotatbok;
+export default UtAvBlokk;
