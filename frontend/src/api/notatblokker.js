@@ -1,6 +1,5 @@
 const BASE_URL = 'http://localhost:3000/api/notatblokker';
 
-// GET feil
 export async function hentNotatblokk(blokkId) {
   try {
     const respons = await fetch(`${BASE_URL}/blokk/${blokkId}`);
@@ -42,4 +41,12 @@ export async function hentNotatblokker(interesse) {
     console.error('Feil i hentNotatblokker:', err);
     throw err;
   }
+}
+
+// DELETE
+export async function slettNotatblokk(blokkId) {
+  const respons = await fetch(`${BASE_URL}/${blokkId}`, {
+    method: 'DELETE'
+  });
+  if (!respons.ok) throw new Error('Kunne ikke slette notatblokk');
 }

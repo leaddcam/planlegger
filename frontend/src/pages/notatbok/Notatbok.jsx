@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import {TilNotat, TilNotatblokk, NyttNotat, NyBlokk, Oversikt} from '../../components';
 import '../../styles/Notatbok.css';
 // hente notater fra database
-import {hentNotater} from '../../api/notater';
-import {hentNotatblokker} from '../../api/notatblokker';
+import {hentNotater, slettNotat} from '../../api/notater';
+import {hentNotatblokker, slettNotatblokk} from '../../api/notatblokker';
 
 function Notatbok() {
   const { interesse } = useParams();
@@ -58,12 +58,21 @@ function Notatbok() {
         <div className="list-wrapper">
           <div className="list-header">
             <h2>Løse sider</h2>
-            <NyttNotat settNotat={settLøseNotater} interesse={interesse}/>
+            <NyttNotat settNotat={settLøseNotater} interesse={interesse} />
           </div>
           <ul className="notat-list">
             {løseNotater.map(n => (
               <li key={n.notatId} className="notat-item">
                   <TilNotat notat={n} blokk={n.blokkId}/>
+                  {/* knapp for å slette et løst notat */}
+                  <button onClick={async () => {
+                    try {
+                      await slettNotat(n.notatId);
+                      settLøseNotater(prev => prev.filter(notat => notat.notatId !== n.notatId));
+                    } catch (err) {
+                      console.error('Feil ved sletting av notat:', err);
+                    }
+                  }}>🗑</button>
               </li>
               ))}
           </ul>
@@ -79,6 +88,18 @@ function Notatbok() {
             {Object.entries(notatblokker).map(([blokkID, { navn }]) => (
               <li key={blokkID} className="notat-item">
                 <TilNotatblokk blokkNavn={navn} blokkId={blokkID}/>
+                <button onClick={async () => {
+                  try {
+                    await slettNotatblokk(blokkID);
+                    settNotatblokker(prev => {
+                      const ny = {...prev};
+                      delete ny[blokkID];
+                      return ny;
+                    });
+                  } catch (err) {
+                    console.error('Feil ved sletting av notatblokk:', err);
+                  }
+                }}>🗑</button>
               </li>
             ))}
         </ul>

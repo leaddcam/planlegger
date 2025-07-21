@@ -56,6 +56,15 @@ export async function oppdaterNotat(id, { tittel, innhold }) {
     return res.json();
 }
 
+// DELETE
+export async function slettNotat(notatId) {
+  const respons = await fetch(`${BASE_URL}/${notatId}`, {
+    method: 'DELETE'
+  });
+  if (!respons.ok) throw new Error('Kunne ikke slette notat');
+}
+
+
 
 
 

@@ -102,4 +102,34 @@ router.post('/blokk', async (req, res) => {
   }
 });
 
+// DELETE
+router.delete('/:blokkId', async (req, res) => {
+  const blokkId = req.params.blokkId;
+
+  try {
+    // Først: Slett alle notater i denne blokken
+    await db.execute(
+      'DELETE FROM notater WHERE blokkId = ?',
+      [blokkId]
+    );
+
+    // Deretter: Slett selve blokken
+    const [result] = await db.execute(
+      'DELETE FROM notatblokker WHERE blokkId = ?',
+      [blokkId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ melding: 'Notatblokk ikke funnet' });
+    }
+
+    res.status(204).send(); // Slettet uten innhold
+  } catch (err) {
+    console.error('Feil ved sletting av notatblokk:', err);
+    res.status(500).json({ melding: 'Serverfeil ved sletting' });
+  }
+});
+
+
+
 module.exports = router;

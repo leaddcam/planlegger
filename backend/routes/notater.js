@@ -84,5 +84,27 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// DELETE ( ett notat )
+router.delete('/:notatId', async (req, res) => {
+  const { notatId } = req.params;
+
+  try {
+    const [result] = await db.execute(
+      'DELETE FROM notater WHERE notatId = ?',
+      [notatId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ melding: 'Notat ikke funnet' });
+    }
+
+    res.status(204).send(); // OK, ingen innhold
+  } catch (err) {
+    console.error('Feil ved sletting av notat:', err);
+    res.status(500).json({ melding: 'Serverfeil ved sletting' });
+  }
+});
+
+
 module.exports = router;
 
