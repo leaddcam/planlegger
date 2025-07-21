@@ -5,7 +5,7 @@ const db = require('../db');
 // svarer på http://localhost:3000/api/notatblokker
 //
 
-// Øker antall_notater med 1
+// øker antall_notater med 1
 router.post('/oppdater-antall/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
@@ -60,8 +60,8 @@ router.get('/blokker/:interesse', async (req, res) => {
   }
 });
 
-//  Henter én blokk basert på blokkId
-router.get('/notatblokk/:blokkId', async (req, res) => {
+// henter én blokk basert på blokkId
+router.get('/blokk/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
   try {

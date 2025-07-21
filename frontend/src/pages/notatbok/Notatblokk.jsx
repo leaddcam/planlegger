@@ -6,40 +6,39 @@ import {hentNotatblokk} from '../../api/notatblokker';
 import {hentNotater} from '../../api/notater';
 
 function Notatblokk() {
-  const {interesse, blokkId: blokkID} = useParams();
+  const {interesse, blokkId} = useParams();
+  const blokkIdNum = Number(blokkId);
+
   const [notater, settNotater] = useState([]);
   const [blokkNavn, settBlokkNavn] = useState("");
 
   useEffect(() => {
     async function hentData() {
       try {
-        const alleNotater = await hentNotater(interesse);
-        console.log("blokkid:", blokkID);
-        const blokkIdNum = Number(blokkID);
-        console.log("renset blokkid:", blokkIdNum);
-        const blokkNotater = alleNotater.filter(n => n.blokkId === blokkIdNum);
-        console.log(blokkNotater);
-        settNotater(blokkNotater);
-
-        // feil ved henting fra notatblokker.js
-        const blokkInfo = await hentNotatblokk(blokkIdNum);
+        const [alleNotater, blokkInfo] = await Promise.all([
+          hentNotater(interesse),
+          hentNotatblokk(blokkIdNum)
+        ]);
+        settNotater(alleNotater.filter(n => n.blokkId === blokkIdNum));
         settBlokkNavn(blokkInfo.navn);
       } catch (err) {
         console.error('Feil ved henting av data til notatblokk:', err);
       }
     }
 
-    hentData();
-  }, [interesse, blokkID]);
+    if (interesse && !isNaN(blokkIdNum)) {
+      hentData();
+    }
+  }, [interesse, blokkIdNum]);
 
   return (
     <div className="notater-container">
-      <h1>Blokk: {blokkNavn}</h1>
-        <NyttNotat settNotat={settNotater} blokkId={Number(blokkID)} />
+      <h1>Blokk: {blokkNavn || "Ukjent blokk"}</h1>
+        <NyttNotat interesse={interesse} settNotat={settNotater} blokkId={blokkIdNum} />
       <ul>
         {notater.map(notat => (
           <li key={notat.notatId}>
-            <TilNotat notat={notat} blokk={notat.blokkId} />
+            <TilNotat notat={notat} blokkId={blokkIdNum} />
           </li>
         ))}
       </ul>

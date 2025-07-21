@@ -5,6 +5,7 @@ const app = express();
 
 // aktiverer cors og json-parsing
 app.use(cors());
+
 app.use(express.json());
 
 // håndtering av løse notater
