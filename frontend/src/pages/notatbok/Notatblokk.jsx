@@ -21,6 +21,7 @@ function Notatblokk() {
         console.log(blokkNotater);
         settNotater(blokkNotater);
 
+        // feil ved henting fra notatblokker.js
         const blokkInfo = await hentNotatblokk(blokkIdNum);
         settBlokkNavn(blokkInfo.navn);
       } catch (err) {

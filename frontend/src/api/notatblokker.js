@@ -1,8 +1,9 @@
 const BASE_URL = 'http://localhost:3000/api/notatblokker';
 
+// GET feil
 export async function hentNotatblokk(blokkId) {
   try {
-    const respons = await fetch(`http://localhost:3001/api/notatblokker/blokk/${blokkId}`);
+    const respons = await fetch(`${BASE_URL}/blokk/${blokkId}`);
     if (!respons.ok) {
       throw new Error('Kunne ikke hente notatblokk');
     }
@@ -15,7 +16,7 @@ export async function hentNotatblokk(blokkId) {
 }
 
 export async function lagreNotatblokk({ interesse, navn }) {
-  const res = await fetch('http://localhost:3000/api/notatblokker/blokk', {
+  const res = await fetch(`${BASE_URL}/blokk`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ interesse, navn }),
