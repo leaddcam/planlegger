@@ -14,6 +14,7 @@ function App() {
         <Route path="/" element={<Startside />} />
         <Route path="/home" element={<Home />} />
         <Route path="/emne/:emnekode" element={<Emne />} />
+        <Route path="/emne/:emnekode/notatbok" element={<Notatbok />} />
         <Route path="/interesse/:interesse" element={<Interesse />} />
         <Route path="/interesse/:interesse/notatbok" element={<Notatbok />} />
         <Route path="/interesse/:interesse/notatbok/notat/:notatId" element={<Notat />} />

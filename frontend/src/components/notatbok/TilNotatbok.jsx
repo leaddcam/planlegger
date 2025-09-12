@@ -5,9 +5,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 function TilNotatbok() {
   const naviger = useNavigate();
   const { interesse } = useParams();
+  const { emnekode } = useParams();
 
   const onClick = () => {
-    naviger(`/interesse/${interesse}/notatbok`);
+    if (interesse) {
+      naviger(`/interesse/${interesse}/notatbok`);
+    } 
+    if (emnekode) {
+      naviger(`/emne/${emnekode}/notatbok`);
+    }
+    
   };
 
   return (

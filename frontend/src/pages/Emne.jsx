@@ -3,7 +3,7 @@
 // importerer useParams for å kunne ekstrahere URL parametere
 import {useParams} from 'react-router-dom';
 import '../styles/Emne.css';
-import {TilHjem} from '../components';
+import {TilNotatbok, TilHjem} from '../components';
 import InputFelt from '../components/InputFelt'
 
 // emneData: objekt som holder emne-spsifikk data
@@ -39,6 +39,7 @@ function Emne() {
         <InputFelt />
       )}
     </div>
+    <TilNotatbok />
     </>
   );
 }

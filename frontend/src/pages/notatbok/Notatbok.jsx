@@ -8,6 +8,7 @@ import {hentNotatblokker, slettNotatblokk} from '../../api/notatblokker';
 
 function Notatbok() {
   const { interesse } = useParams();
+  const { emnekode } = useParams();
   const [løseNotater, settLøseNotater] = useState([]);
   const [notatblokker, settNotatblokker] = useState({});
   
