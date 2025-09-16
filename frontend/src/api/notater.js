@@ -1,70 +1,71 @@
+// src/api/notater.js
 const BASE_URL = 'http://localhost:3000/api/notater';
 
-export async function hentNotater(interesse) {
-  console.log("Kaller API for:", `${BASE_URL}/${interesse}`);
-  try {
-    const res = await fetch(`${BASE_URL}/${interesse}`);
-    
-    if (!res.ok) {
-      console.error("Feil fra serveren:", res.status, await res.text());
-      return [];
-    }
-
-    const json = await res.json();
-    console.log("JSON mottatt:", json);
-    return json;
-  } catch (err) {
-    console.error("Feil under fetch:", err);
-    return [];
-  }
-}
-
-
-export async function hentNotatMedId(id) {
-  const res = await fetch(`${BASE_URL}/id/${id}`);
-  if (!res.ok) throw new Error('Kunne ikke hente notat');
-  return res.json();
-}
-
-export async function lagreNotat({ interesse, tittel, innhold, blokkId }) {
-  const renBlokkId = (blokkId && !isNaN(Number(blokkId))) ? Number(blokkId) : null;
-  console.log('Lagrer notat med blokkId:', blokkId);
-  const res = await fetch(BASE_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ interesse, tittel, innhold, blokkId: renBlokkId }),
-  });
-
+async function apiFetch(url, options = {}) {
+  const res = await fetch(url, options);
   if (!res.ok) {
-    const feil = await res.json();
-    throw new Error(feil.error || 'Kunne ikke lagre notat');
+    // prøv å hente feilmelding fra backend
+    let msg = 'Ukjent feil';
+    try { const j = await res.json(); msg = j.melding || j.error || msg; } catch {}
+    // logg rå respons ved behov
+    // console.error('API-feil', res.status, await res.text().catch(()=>''));
+    throw new Error(msg);
   }
+  if (res.status === 204) return null;
   return res.json();
 }
 
+/**
+ * Opprett notat.
+ * Send *eksakt én* av interesse/emne (den andre = null). blokkId valgfri.
+ * Returnerer: { notatId, melding }
+ */
+export async function lagreNotat({ tittel, innhold = '', blokkId = null, interesse = null, emne = null }) {
+  const body = { tittel, innhold, blokkId, interesse, emne };
+  return apiFetch(`${BASE_URL}/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+}
+
+/**
+ * Hent alle notater for en INTERESSE
+ * (backend: GET /api/notater/interesse/:interesse)
+ */
+export async function hentNotaterForInteresse(interesse) {
+  return apiFetch(`${BASE_URL}/interesse/${encodeURIComponent(interesse)}`);
+}
+
+/**
+ * Hent alle notater for et EMNE
+ * (backend: GET /api/notater/emne/:emne)
+ */
+export async function hentNotaterForEmne(emne) {
+  return apiFetch(`${BASE_URL}/emne/${encodeURIComponent(emne)}`);
+}
+
+/**
+ * Hent ett notat via ID
+ */
+export async function hentNotatById(id) {
+  return apiFetch(`${BASE_URL}/id/${encodeURIComponent(id)}`);
+}
+
+/**
+ * Oppdater notat (tittel/innhold)
+ */
 export async function oppdaterNotat(id, { tittel, innhold }) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
+  return apiFetch(`${BASE_URL}/${encodeURIComponent(id)}`, {
     method: 'PUT',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ tittel, innhold }),
   });
-
-  if (!res.ok) {
-    const feil = await res.json();
-    throw new Error(feil.error || 'Kunne ikke oppdatere notat');
-  }
-    return res.json();
 }
 
-// DELETE
+/**
+ * Slett notat
+ */
 export async function slettNotat(notatId) {
-  const respons = await fetch(`${BASE_URL}/${notatId}`, {
-    method: 'DELETE'
-  });
-  if (!respons.ok) throw new Error('Kunne ikke slette notat');
+  await apiFetch(`${BASE_URL}/${encodeURIComponent(notatId)}`, { method: 'DELETE' });
 }
-
-
-
-
-

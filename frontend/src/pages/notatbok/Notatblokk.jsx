@@ -1,52 +1,93 @@
-import {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import '../../styles/Notatblokk.css';
-import {NyttNotat, TilNotat, UtAvBlokk} from '../../components';
-import {hentNotatblokk} from '../../api/notatblokker';
-import {hentNotater} from '../../api/notater';
+import { NyttNotat, TilNotat, UtAvBlokk } from '../../components';
+
+import { hentNotatblokk } from '../../api/notatblokker';
+import { hentNotaterForInteresse } from '../../api/notater';
 
 function Notatblokk() {
-  const {interesse, blokkId} = useParams();
+  const { interesse, blokkId } = useParams();
   const blokkIdNum = Number(blokkId);
 
   const [notater, settNotater] = useState([]);
-  const [blokkNavn, settBlokkNavn] = useState("");
+  const [blokkNavn, settBlokkNavn] = useState('');
+  const [laster, settLaster] = useState(true);
+  const [feil, settFeil] = useState(null);
 
   useEffect(() => {
+    let aktiv = true;
+
     async function hentData() {
       try {
+        settLaster(true);
+        settFeil(null);
+
         const [alleNotater, blokkInfo] = await Promise.all([
-          hentNotater(interesse),
-          hentNotatblokk(blokkIdNum)
+          hentNotaterForInteresse(interesse),
+          hentNotatblokk(blokkIdNum),
         ]);
-        settNotater(alleNotater.filter(n => n.blokkId === blokkIdNum));
-        settBlokkNavn(blokkInfo.navn);
+
+        if (!aktiv) return;
+
+        // Filtrer til notater i denne blokken
+        const iDenneBlokken = alleNotater.filter(
+          (n) => Number(n.blokkId) === blokkIdNum
+        );
+
+        settNotater(iDenneBlokken);
+        settBlokkNavn(blokkInfo?.navn || '');
       } catch (err) {
+        if (!aktiv) return;
         console.error('Feil ved henting av data til notatblokk:', err);
+        settFeil('Kunne ikke hente data');
+      } finally {
+        if (aktiv) settLaster(false);
       }
     }
 
-    if (interesse && !isNaN(blokkIdNum)) {
+    if (interesse && !Number.isNaN(blokkIdNum)) {
       hentData();
     }
+
+    return () => {
+      aktiv = false;
+    };
   }, [interesse, blokkIdNum]);
 
   return (
     <>
-    <UtAvBlokk />
-    <div className="notater-container">
-      <h1>Blokk: {blokkNavn || "Ukjent blokk"}</h1>
+      <UtAvBlokk />
+      <div className="notater-container">
+        <h1>Blokk: {blokkNavn || 'Ukjent blokk'}</h1>
+
         <div className="knapper">
-          <NyttNotat interesse={interesse} settNotat={settNotater} blokkId={blokkIdNum} />
+          {/* Når du oppretter nytt notat i en blokk for en interesse:
+             - send interesse
+             - emne = null
+             - blokkId = blokkIdNum
+          */}
+          <NyttNotat
+            interesse={interesse}
+            emne={null}
+            blokkId={blokkIdNum}
+            settNotat={settNotater}
+          />
         </div>
-      <ul>
-        {notater.map(notat => (
-          <li key={notat.notatId}>
-            <TilNotat notat={notat} blokkId={blokkIdNum} />
-          </li>
-        ))}
-      </ul>
-    </div>
+
+        {laster && <p>Laster…</p>}
+        {feil && <p style={{ color: 'red' }}>{feil}</p>}
+
+        {!laster && !feil && (
+          <ul>
+            {notater.map((notat) => (
+              <li key={notat.notatId}>
+                <TilNotat notat={notat} blokkId={blokkIdNum} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </>
   );
 }

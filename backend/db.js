@@ -1,30 +1,27 @@
-const mysql = require('mysql2/promise'); // håndterer databasen (her: "planlegger")
+// db.js (PostgreSQL via pg)
+const { Pool } = require('pg');
 require('dotenv').config();
 
-// kobler backend til MySQL-database
-const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: process.env.PASSORD,
-    database: 'planlegger',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
+// setting up pool
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL // ssl: { rejectUnauthorized: false } // enable when you deploy to managed PG (Azure)
+  });
 
-// tester forbindelsen
-async function testConnection() {
-  try {
-    // Hent en connection fra poolen
-    const connection = await db.getConnection();
-    console.log("Koblet til MySQL-databasen " + process.env.DB_NAME);
-    connection.release(); // gi connection tilbake til pool
-  } catch (err) {
-    console.error('Feil ved tilkobling til database: ', err);
-  }
+// Simple helper like mysql2's pool.execute
+async function query(text, params) {
+  return pool.query(text, params);
 }
 
+// Test connection (similar to your MySQL version)
+async function testConnection() {
+  try {
+    const res = await pool.query('SELECT version()');
+    console.log('Koblet til PostgreSQL:', res.rows[0].version);
+  } catch (err) {
+    console.error('Feil ved tilkobling til PostgreSQL:', err);
+    process.exitCode = 1;
+  }
+}
 testConnection();
 
-
-module.exports = db;
+module.exports = { pool, query };

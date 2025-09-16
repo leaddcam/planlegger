@@ -1,52 +1,51 @@
+// src/api/notatblokker.js
 const BASE_URL = 'http://localhost:3000/api/notatblokker';
 
-export async function hentNotatblokk(blokkId) {
-  try {
-    const respons = await fetch(`${BASE_URL}/blokk/${blokkId}`);
-    if (!respons.ok) {
-      throw new Error('Kunne ikke hente notatblokk');
-    }
-    const data = await respons.json();
-    return data;
-  } catch (err) {
-    console.error('Feil i hentNotatblokk:', err);
-    throw err;
-  }
-}
-
-export async function lagreNotatblokk({ interesse, navn }) {
-  const res = await fetch(`${BASE_URL}/blokk`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ interesse, navn }),
-  });
-
+async function apiFetch(url, options = {}) {
+  const res = await fetch(url, options);
   if (!res.ok) {
-    const feil = await res.json();
-    throw new Error(feil.melding || 'Kunne ikke lagre notatblokk');
+    let msg = 'Ukjent feil';
+    try { const j = await res.json(); msg = j.melding || j.error || msg; } catch {}
+    throw new Error(msg);
   }
-
-  return res.json(); // { blokkId, navn }
+  // No content
+  if (res.status === 204) return null;
+  return res.json();
 }
 
-export async function hentNotatblokker(interesse) {
-  try {
-    const respons = await fetch(`${BASE_URL}/blokker/${interesse}`);
-    if (!respons.ok) {
-      throw new Error('Kunne ikke hente notatblokker');
-    }
-    const data = await respons.json(); // forventer f.eks. [{ blokkId: 1, navn: 'Intro' }, ...]
-    return data;
-  } catch (err) {
-    console.error('Feil i hentNotatblokker:', err);
-    throw err;
-  }
+/**
+ * Hent én notatblokk
+ * @returns {Promise<object>} f.eks. { blokkId, interesse|null, emne|null, navn, opprettelsesdato, antall_notater }
+ */
+export async function hentNotatblokk(blokkId) {
+  return apiFetch(`${BASE_URL}/blokk/${encodeURIComponent(blokkId)}`);
 }
 
-// DELETE
-export async function slettNotatblokk(blokkId) {
-  const respons = await fetch(`${BASE_URL}/${blokkId}`, {
-    method: 'DELETE'
+/**
+ * Opprett notatblokk
+ * Send *enten* interesse ELLER emne (den andre settes til null) + navn
+ * @returns {Promise<object>} hele raden inkl. "blokkId"
+ */
+export async function lagreNotatblokk({ interesse = null, emne = null, navn }) {
+  const body = { interesse, emne, navn };
+  return apiFetch(`${BASE_URL}/blokk`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
-  if (!respons.ok) throw new Error('Kunne ikke slette notatblokk');
+}
+
+/**
+ * Hent alle blokker for en gitt interesse
+ * (matcher backend: GET /api/notatblokker/blokker/:interesse)
+ */
+export async function hentNotatblokkerForInteresse(interesse) {
+  return apiFetch(`${BASE_URL}/blokker/${encodeURIComponent(interesse)}`);
+}
+
+/**
+ * Slett notatblokk (og tilhørende notater slettes i backend)
+ */
+export async function slettNotatblokk(blokkId) {
+  await apiFetch(`${BASE_URL}/${encodeURIComponent(blokkId)}`, { method: 'DELETE' });
 }

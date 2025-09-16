@@ -1,21 +1,19 @@
+// routes/notatblokker.js (PostgreSQL-versjon)
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
-//
-// svarer på http://localhost:3000/api/notatblokker
-//
+const { query } = require('../db'); // <- pg helper
 
-// øker antall_notater med 1
+// Øker antall_notater med 1
 router.post('/oppdater-antall/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
   try {
-    const [result] = await db.query(
-      'UPDATE notatblokker SET antall_notater = antall_notater + 1 WHERE blokkId = ?',
+    const result = await query(
+      'UPDATE notatblokker SET antall_notater = antall_notater + 1 WHERE "blokkId" = $1',
       [blokkId]
     );
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ melding: 'Notatblokk ikke funnet' });
     }
 
@@ -26,18 +24,47 @@ router.post('/oppdater-antall/:blokkId', async (req, res) => {
   }
 });
 
+// Legger til notatblokk (variant 1 – bare interesse + navn)
+router.post('/blokk', async (req, res) => {
+  const { interesse, emne = null, navn } = req.body;
 
-// legger til notatblokk i notatblokker
-router.post('/blokker', async (req, res) => {
-  const { interesse, navn } = req.body;
+  if ((!interesse && !emne) || !navn) {
+    return res.status(400).json({ melding: 'Mangler interesse/emne eller navn' });
+  }
 
   try {
-    const [result] = await db.query(
-      'INSERT INTO notatblokker (interesse, navn, opprettelsesdato, antall_notater) VALUES (?, ?, NOW(), 0)',
-      [interesse, navn]
+    const sql = `
+      INSERT INTO notatblokker (interesse, emne, navn)
+      VALUES ($1, $2, $3)
+      RETURNING "blokkId", interesse, emne, navn, opprettelsesdato, antall_notater
+    `;
+    const values = [interesse, emne, navn];
+    const { rows } = await query(sql, values);
+
+    res.status(201).json(rows[0]);
+  } catch (err) {
+    console.error('Feil ved opprettelse av blokk:', err);
+    res.status(500).json({ melding: 'Feil ved opprettelse av blokk' });
+  }
+});
+
+// (Beholdes kun hvis du trenger en egen /blokker-endepunkt – her med både interesse & emne-støtte)
+router.post('/blokker', async (req, res) => {
+  const { interesse, emne = null, navn } = req.body;
+
+  if ((!interesse && !emne) || !navn) {
+    return res.status(400).json({ melding: 'Mangler interesse/emne eller navn' });
+  }
+
+  try {
+    const { rows } = await query(
+      `INSERT INTO notatblokker (interesse, emne, navn)
+       VALUES ($1, $2, $3)
+       RETURNING "blokkId", interesse, emne, navn, opprettelsesdato, antall_notater`,
+      [interesse, emne, navn]
     );
 
-    res.json({ blokkId: result.insertId, interesse, navn });
+    res.status(201).json(rows[0]);
   } catch (err) {
     console.error('Feil ved opprettelse av blokk:', err);
     res.status(500).json({ error: 'Feil ved opprettelse av blokk' });
@@ -49,24 +76,24 @@ router.get('/blokker/:interesse', async (req, res) => {
   const { interesse } = req.params;
 
   try {
-    const [result] = await db.query(
-      'SELECT * FROM notatblokker WHERE interesse = ?',
+    const { rows } = await query(
+      'SELECT * FROM notatblokker WHERE interesse = $1 ORDER BY "blokkId" DESC',
       [interesse]
     );
-    res.json(result);
+    res.json(rows);
   } catch (err) {
     console.error('Feil ved henting av blokker:', err);
     res.status(500).json({ error: 'Feil ved henting av blokker' });
   }
 });
 
-// henter én blokk basert på blokkId
+// Henter én blokk basert på blokkId
 router.get('/blokk/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
   try {
-    const [rows] = await db.query(
-      'SELECT * FROM notatblokker WHERE blokkId = ?',
+    const { rows } = await query(
+      'SELECT * FROM notatblokker WHERE "blokkId" = $1',
       [blokkId]
     );
     if (rows.length === 0) {
@@ -79,57 +106,26 @@ router.get('/blokk/:blokkId', async (req, res) => {
   }
 });
 
-
-router.post('/blokk', async (req, res) => {
-  const { interesse, navn } = req.body;
-
-  if (!interesse || !navn) {
-    return res.status(400).json({ melding: 'Mangler interesse eller navn' });
-  }
-
-  try {
-    const sql = `INSERT INTO notatblokker (interesse, navn) VALUES (?, ?)`;
-    const [result] = await db.query(sql, [interesse, navn]);
-
-    if (!result.insertId) {
-      return res.status(500).json({ melding: 'Kunne ikke lagre notatblokk' });
-    }
-
-    res.status(201).json({ blokkId: result.insertId, navn });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ melding: 'Serverfeil' });
-  }
-});
-
 // DELETE
 router.delete('/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
   try {
-    // Først: Slett alle notater i denne blokken
-    await db.execute(
-      'DELETE FROM notater WHERE blokkId = ?',
-      [blokkId]
-    );
+    // 1) Slett notater i blokken
+    await query('DELETE FROM notater WHERE "blokkId" = $1', [blokkId]);
 
-    // Deretter: Slett selve blokken
-    const [result] = await db.execute(
-      'DELETE FROM notatblokker WHERE blokkId = ?',
-      [blokkId]
-    );
+    // 2) Slett selve blokken
+    const result = await query('DELETE FROM notatblokker WHERE "blokkId" = $1', [blokkId]);
 
-    if (result.affectedRows === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ melding: 'Notatblokk ikke funnet' });
     }
 
-    res.status(204).send(); // Slettet uten innhold
+    res.status(204).send();
   } catch (err) {
     console.error('Feil ved sletting av notatblokk:', err);
     res.status(500).json({ melding: 'Serverfeil ved sletting' });
   }
 });
-
-
 
 module.exports = router;
