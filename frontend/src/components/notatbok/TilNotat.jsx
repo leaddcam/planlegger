@@ -4,9 +4,7 @@ import '../../styles/TilNotat.css';
 
 function TilNotat({ notat, blokkId }) {
   const naviger = useNavigate();
-  const params = useParams();
-  const interesse = params.interesse ?? null;
-  const emne = params.emne ?? params.emnekode ?? null;
+  const {interesse, emnekode} = useParams();
 
   const harBlokk =
     blokkId !== null && blokkId !== undefined && !Number.isNaN(Number(blokkId));
@@ -22,12 +20,12 @@ function TilNotat({ notat, blokkId }) {
       return;
     }
 
-    if (emne) {
+    if (emnekode) {
       // emne-kontekst
       if (harBlokk) {
-        naviger(`/emne/${emne}/notatbok/blokk/${Number(blokkId)}/notat/${notat.notatId}`);
+        naviger(`/emne/${emnekode}/notatbok/blokk/${Number(blokkId)}/notat/${notat.notatId}`);
       } else {
-        naviger(`/emne/${emne}/notatbok/notat/${notat.notatId}`);
+        naviger(`/emne/${emnekode}/notatbok/notat/${notat.notatId}`);
       }
       return;
     }
