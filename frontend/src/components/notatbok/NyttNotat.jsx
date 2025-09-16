@@ -1,71 +1,80 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; 
+import { useNavigate, useParams } from 'react-router-dom';
 import { lagreNotat } from '../../api/notater';
 import NyttNotatModal from './NyttNotatModal';
 import '../../styles/NyttNotat.css';
 
-function NyttNotat({ interesse: propInteresse, blokkId, settNotat }) {
+/**
+ * Props:
+ * - interesse?: string | null
+ * - emne?: string | null
+ * - blokkId?: number | null
+ * - settNotat?: setState (liste)
+ */
+function NyttNotat({ interesse: propInteresse = null, emne: propEmne = null, blokkId = null, settNotat }) {
   const [visModal, settVisModal] = useState(false);
   const navigate = useNavigate();
-  const { interesse: urlInteresse } = useParams(); // henter fra URL
-  const interesse = propInteresse || urlInteresse; // fallback
+  const params = useParams();
 
-  console.log(blokkId);
+  // Fallback til URL-param om prop ikke er satt
+  const interesse = propInteresse ?? params.interesse ?? null;
+  const emne = propEmne ?? params.emne ?? params.emnekode ?? null;
 
   const lagreMedTittel = async (tittel) => {
-  try {
-    console.log("Notat: ", { interesse, tittel, blokkId });
+    try {
+      const harBlokk =
+        blokkId !== null && blokkId !== undefined && !Number.isNaN(Number(blokkId));
 
-    // Bestem om dette er et "løst" notat eller tilhører en blokk
-    const harBlokk = !isNaN(blokkId) && blokkId !== null && blokkId !== undefined;
-
-    // 1. Lagre notat (med eller uten blokkId)
-    const nyttNotat = await lagreNotat({
-      interesse,
-      tittel,
-      innhold: '',
-      blokkId: harBlokk ? blokkId : null
-    });
-
-    // 2. Oppdater backend for notatblokker dersom blokkId er satt
-    if (harBlokk) {
-      await fetch(`http://localhost:3000/api/notatblokker/oppdater-antall/${blokkId}`, {
-        method: 'POST'
+      // Lagre notat – eksakt én av interesse/emne skal ha verdi
+      const nyttNotat = await lagreNotat({
+        tittel,
+        innhold: '',
+        blokkId: harBlokk ? Number(blokkId) : null,
+        interesse: interesse ? String(interesse) : null,
+        emne: interesse ? null : (emne ? String(emne) : null),
       });
+
+      // Oppdater antall i blokk hvis relevant
+      if (harBlokk) {
+        await fetch(`http://localhost:3000/api/notatblokker/oppdater-antall/${Number(blokkId)}`, {
+          method: 'POST',
+        });
+      }
+
+      // Oppdater lokal state (legg til nytt notat i liste)
+      if (settNotat) {
+        settNotat((prev) => [...prev, { ...nyttNotat, blokkId: harBlokk ? Number(blokkId) : null, tittel, innhold: '' }]);
+      }
+
+      // Naviger til det nye notatet
+      if (interesse) {
+        if (harBlokk) {
+          navigate(`/interesse/${interesse}/notatbok/blokk/${Number(blokkId)}/notat/${nyttNotat.notatId}`);
+        } else {
+          navigate(`/interesse/${interesse}/notatbok/notat/${nyttNotat.notatId}`);
+        }
+      } else if (emne) {
+        // Emne-kontekst: juster til din faktiske rute for visning av enkelt-notat
+        navigate(`/emne/${emne}/notatbok/notat/${nyttNotat.notatId}`);
+      } else {
+        navigate(`/`);
+      }
+    } catch (error) {
+      alert('Feil ved lagring av notatet.');
+      console.error(error);
     }
-
-    // 3. Oppdater frontend
-    if (settNotat) {
-      settNotat((prev) => [...prev, nyttNotat]);
-    }
-
-    // 4. Naviger til notatsiden
-    if (harBlokk) {
-      navigate(`/interesse/${interesse}/notatbok/blokk/${blokkId}/notat/${nyttNotat.notatId}`);
-    } else {
-      navigate(`/interesse/${interesse}/notatbok/notat/${nyttNotat.notatId}`);
-    }
-
-  } catch (error) {
-    alert("Feil ved lagring av notatet.");
-    console.error(error);
-  }
-};
-
+  };
 
   return (
     <>
-      <button onClick={() => settVisModal(true)} className="nytt-notat">📝</button>
+      <button onClick={() => settVisModal(true)} className="nytt-notat">
+        📝
+      </button>
       {visModal && (
-        <NyttNotatModal
-          onLukk={() => settVisModal(false)}
-          onLagre={lagreMedTittel}
-        />
+        <NyttNotatModal onLukk={() => settVisModal(false)} onLagre={lagreMedTittel} />
       )}
     </>
   );
 }
 
 export default NyttNotat;
-
-

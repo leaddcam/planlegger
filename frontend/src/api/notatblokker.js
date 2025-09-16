@@ -44,6 +44,15 @@ export async function hentNotatblokkerForInteresse(interesse) {
 }
 
 /**
+ * Hent alle blokker for et gitt emne
+ * (matcher backend: GET /api/notatblokker/blokker/emne/:emne)
+ */
+export async function hentNotatblokkerForEmne(emne) {
+  return apiFetch(`${BASE_URL}/blokker/emne/${encodeURIComponent(emne)}`);
+}
+
+
+/**
  * Slett notatblokk (og tilhørende notater slettes i backend)
  */
 export async function slettNotatblokk(blokkId) {

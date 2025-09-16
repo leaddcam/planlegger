@@ -4,9 +4,16 @@ import '../../styles/TilNotatblokk.css';
 
 function TilNotatblokk({blokkNavn, blokkId}) {
     const naviger = useNavigate();
-    const {interesse} = useParams(); // henter interessenavn fra URL
+    const {interesse, emnekode} = useParams(); // henter interessenavn fra URL
 
-    const handleClick = () => {naviger(`/interesse/${interesse}/notatbok/blokk/${blokkId}`)};
+    const handleClick = () => {
+        if (interesse) {
+            naviger(`/interesse/${interesse}/notatbok/blokk/${blokkId}`);
+        } 
+        if (emnekode) {
+            naviger(`/emne/${emnekode}/notatbok/blokk/${blokkId}`);
+        }
+    };
 
     return (
         <button onClick={handleClick} className="til-blokk">

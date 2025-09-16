@@ -87,6 +87,22 @@ router.get('/blokker/:interesse', async (req, res) => {
   }
 });
 
+// henter alle blokker for et emne
+router.get('/blokker/emne/:emne', async (req, res) => {
+  const { emne } = req.params;
+  try {
+    const { rows } = await query(
+      'SELECT * FROM notatblokker WHERE emne = $1 ORDER BY "blokkId" DESC',
+      [emne]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Feil ved henting av blokker (emne):', err);
+    res.status(500).json({ error: 'Feil ved henting av blokker' });
+  }
+});
+
+
 // Henter én blokk basert på blokkId
 router.get('/blokk/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;

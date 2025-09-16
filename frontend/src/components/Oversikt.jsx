@@ -4,10 +4,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function Oversikt() {
   const naviger = useNavigate();
-  const {interesse} = useParams();
+  const {interesse, emnekode} = useParams();
 
   const onClick = () => {
-    naviger(`/interesse/${interesse}`);
+    if (interesse) {
+      naviger(`/interesse/${interesse}`);
+    }
+    if (emnekode) {
+      naviger(`/emne/${emnekode}`);
+    }
   };
 
   return (

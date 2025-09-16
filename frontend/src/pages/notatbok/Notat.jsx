@@ -4,10 +4,9 @@ import { hentNotatById, lagreNotat, oppdaterNotat } from '../../api/notater';
 import '../../styles/Notat.css';
 
 function Notat() {
-  // Støtt både interesse og emne (noen steder heter emne "emnekode")
+  // støtt både interesse og emne
   const params = useParams();
-  const { interesse, notatId, blokkId } = params;
-  const emne = params.emne ?? params.emnekode ?? null;
+  const { interesse, notatId, blokkId, emnekode } = params;
 
   const navigate = useNavigate();
 
@@ -19,7 +18,7 @@ function Notat() {
   const renBlokkId = !isNaN(parseInt(blokkId)) ? parseInt(blokkId) : null;
 
   const iInteresseKontekst = Boolean(interesse);
-  const iEmneKontekst = Boolean(emne);
+  const iEmneKontekst = Boolean(emnekode);
 
   useEffect(() => {
     if (!eksisterer) return;
@@ -57,13 +56,13 @@ function Notat() {
         innhold,
         blokkId: renBlokkId,                 // brukes kun i interesse-kontekst
         interesse: iInteresseKontekst ? interesse : null,
-        emne: iEmneKontekst ? emne : null,
+        emne: iEmneKontekst ? emnekode : null,
       });
 
       alert('Notatet ble lagret!');
       settErNytt(false);
 
-      // Naviger til riktig visning av det nye notatet
+      // naviger til riktig visning av det nye notatet
       if (iInteresseKontekst) {
         if (renBlokkId !== null) {
           navigate(`/interesse/${interesse}/notatbok/blokk/${renBlokkId}/notat/${respons.notatId}`);
@@ -71,10 +70,13 @@ function Notat() {
           navigate(`/interesse/${interesse}/notatbok/notat/${respons.notatId}`);
         }
       } else if (iEmneKontekst) {
-        // Antatt rute for emne-notater uten blokker:
-        navigate(`/emne/${emne}/notatbok/notat/${respons.notatId}`);
+        if (renBlokkId !== null) {
+          navigate(`/emne/${emnekode}/notatbok/blokk/${renBlokkId}/notat/${respons.notatId}`);
+        } else {
+          navigate(`/emne/${emnekode}/notatbok/notat/${respons.notatId}`);
+        }
       } else {
-        // Fallback om ingen param finnes
+        // om ingen param finnes
         navigate(`/`);
       }
     } catch (err) {
@@ -93,8 +95,11 @@ function Notat() {
       return;
     }
     if (iEmneKontekst) {
-      // Antatt oversiktsside for emne:
-      navigate(`/emne/${emne}/notatbok`);
+      if (renBlokkId !== null) {
+        navigate(`/emne/${emnekode}/notatbok/blokk/${renBlokkId}`);
+      } else {
+        navigate(`/emne/${emnekode}/notatbok`);
+      }
       return;
     }
     navigate(`/`);

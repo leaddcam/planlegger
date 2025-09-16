@@ -4,16 +4,20 @@ import '../../styles/Notatblokk.css';
 import { NyttNotat, TilNotat, UtAvBlokk } from '../../components';
 
 import { hentNotatblokk } from '../../api/notatblokker';
-import { hentNotaterForInteresse } from '../../api/notater';
+import { hentNotaterForInteresse, hentNotaterForEmne } from '../../api/notater';
 
 function Notatblokk() {
-  const { interesse, blokkId } = useParams();
+  // støtt både interesse og emne (hos deg heter emne typisk emnekode i ruta)
+  const { interesse, emnekode, blokkId } = useParams();
   const blokkIdNum = Number(blokkId);
 
   const [notater, settNotater] = useState([]);
   const [blokkNavn, settBlokkNavn] = useState('');
   const [laster, settLaster] = useState(true);
   const [feil, settFeil] = useState(null);
+
+  const iInteresseKontekst = Boolean(interesse);
+  const iEmneKontekst = Boolean(emnekode);
 
   useEffect(() => {
     let aktiv = true;
@@ -24,7 +28,9 @@ function Notatblokk() {
         settFeil(null);
 
         const [alleNotater, blokkInfo] = await Promise.all([
-          hentNotaterForInteresse(interesse),
+          iInteresseKontekst
+            ? hentNotaterForInteresse(interesse)
+            : hentNotaterForEmne(emnekode),
           hentNotatblokk(blokkIdNum),
         ]);
 
@@ -46,14 +52,14 @@ function Notatblokk() {
       }
     }
 
-    if (interesse && !Number.isNaN(blokkIdNum)) {
+    if (!Number.isNaN(blokkIdNum) && (iInteresseKontekst || iEmneKontekst)) {
       hentData();
     }
 
     return () => {
       aktiv = false;
     };
-  }, [interesse, blokkIdNum]);
+  }, [interesse, emnekode, blokkIdNum, iInteresseKontekst, iEmneKontekst]);
 
   return (
     <>
@@ -62,14 +68,13 @@ function Notatblokk() {
         <h1>Blokk: {blokkNavn || 'Ukjent blokk'}</h1>
 
         <div className="knapper">
-          {/* Når du oppretter nytt notat i en blokk for en interesse:
-             - send interesse
-             - emne = null
-             - blokkId = blokkIdNum
+          {/* Når du oppretter nytt notat i en blokk:
+             - setter interesse ELLER emne (den andre = null)
+             - bruker blokkId = blokkIdNum
           */}
           <NyttNotat
-            interesse={interesse}
-            emne={null}
+            interesse={iInteresseKontekst ? interesse : null}
+            emne={iEmneKontekst ? emnekode : null}
             blokkId={blokkIdNum}
             settNotat={settNotater}
           />

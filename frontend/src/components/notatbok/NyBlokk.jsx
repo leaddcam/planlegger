@@ -1,29 +1,38 @@
 import '../../styles/NyBlokk.css';
 import { useState } from 'react';
-import { lagreNotatblokk } from '../../api/notatblokker'; 
+import { lagreNotatblokk } from '../../api/notatblokker';
 
-function NyBlokk({ blokk, settBlokk, interesse }) {
+/**
+ * Props:
+ * - blokk: objektmap { [blokkId]: { navn, notater: [] } }
+ * - settBlokk: setState
+ * - interesse?: string | null
+ * - emne?: string | null
+ */
+function NyBlokk({ blokk, settBlokk, interesse = null, emne = null }) {
   const [venter, settVenter] = useState(false);
 
   const leggTilBlokk = async () => {
-    const navn = prompt("Ny blokk:");
+    const navn = prompt('Ny blokk:');
     if (!navn) return;
 
-    if (blokk[navn]) {
+    // enkel kollisjonssjekk på navn i eksisterende map
+    const finnes = Object.values(blokk || {}).some((b) => b?.navn === navn);
+    if (finnes) {
       alert('Blokk med dette navnet finnes allerede.');
       return;
     }
 
     try {
       settVenter(true);
-      // Kaller API for å lagre blokk i databasen
-      const nyBlokk = await lagreNotatblokk({ interesse, navn });
-      // nyBlokk = { blokkId, navn }
-      
-      // Oppdaterer blokk state med blokkId som nøkkel
-      settBlokk(prev => ({
+
+      // Send EKSakt én av interesse/emne (den andre blir null)
+      const nyBlokk = await lagreNotatblokk({ interesse, emne, navn });
+      // nyBlokk er hele raden fra backend, inkl. blokkId og navn
+
+      settBlokk((prev) => ({
         ...prev,
-        [nyBlokk.blokkId]: { navn: nyBlokk.navn, notater: [] }
+        [nyBlokk.blokkId]: { navn: nyBlokk.navn, notater: [] },
       }));
     } catch (err) {
       alert('Kunne ikke lagre blokken: ' + err.message);
@@ -40,4 +49,3 @@ function NyBlokk({ blokk, settBlokk, interesse }) {
 }
 
 export default NyBlokk;
-
