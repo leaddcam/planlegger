@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { TilNotat, TilNotatblokk, NyttNotat, NyBlokk, Oversikt } from '../../components';
 import '../../styles/Notatbok.css';
 
-// Notater-API
+// notater-API
 import {
   hentNotaterForInteresse,
   hentNotaterForEmne,
   slettNotat,
 } from '../../api/notater';
 
-// Notatblokker-API
+// notatblokker-API
 import {
   hentNotatblokkerForInteresse,
   hentNotatblokkerForEmne,   // ⬅️ NY
@@ -18,7 +18,7 @@ import {
 } from '../../api/notatblokker';
 
 function Notatbok() {
-  // Router kan gi enten { interesse } eller { emnekode }
+  // router kan gi enten { interesse } eller { emnekode }
   const { interesse, emnekode } = useParams();
 
   const [løseNotater, settLøseNotater] = useState([]);
@@ -27,17 +27,17 @@ function Notatbok() {
   useEffect(() => {
     async function hentData() {
       try {
-        // 1) Hent notater for enten interesse ELLER emne
+        // henter notater for enten interesse ELLER emne
         const notater = interesse
           ? await hentNotaterForInteresse(interesse)
           : await hentNotaterForEmne(emnekode);
 
-        // 2) Hent notatblokker for interesse ELLER emne
+        // henter notatblokker for interesse ELLER emne
         const blokker = interesse
           ? await hentNotatblokkerForInteresse(interesse)
           : await hentNotatblokkerForEmne(emnekode);
 
-        // bygg opp struktur for blokker
+        // bygger opp struktur for blokker
         const blokkerMedNotater = {};
         blokker.forEach((blokk) => {
           blokkerMedNotater[blokk.blokkId] = {
@@ -46,7 +46,7 @@ function Notatbok() {
           };
         });
 
-        // del opp notater i løse vs. blokk-tilhørende
+        // deler opp notater i løse vs. blokk-tilhørende
         const løse = [];
         notater.forEach((notat) => {
           if (notat.blokkId === null || notat.blokkId === undefined) {
@@ -54,7 +54,6 @@ function Notatbok() {
           } else if (blokkerMedNotater[notat.blokkId]) {
             blokkerMedNotater[notat.blokkId].notater.push(notat);
           } else {
-            // notatet tilhører en blokk vi ikke har (f.eks. inkonsistens)
             løse.push(notat);
           }
         });
@@ -69,7 +68,7 @@ function Notatbok() {
     hentData();
   }, [interesse, emnekode]);
 
-  // Props til NyttNotat / NyBlokk (send begge; backend krever at bare én faktisk har verdi)
+  // props til NyttNotat / NyBlokk (send begge; backend krever at bare én faktisk har verdi)
   const interesseProp = interesse ?? null;
   const emneProp = emnekode ?? null;
 
@@ -79,7 +78,6 @@ function Notatbok() {
       <h1>Notatbok for {interesseProp ?? emneProp}</h1>
 
       <div className="lists-container">
-        {/* Løse notater + NyttNotat */}
         <div className="list-wrapper">
           <div className="list-header">
             <h2>Løse sider</h2>
@@ -112,8 +110,6 @@ function Notatbok() {
             ))}
           </ul>
         </div>
-
-        {/* Notatblokker + NyBlokk — nå for både interesse og emne */}
         <div className="list-wrapper">
           <div className="list-header">
             <h2>Seksjoner</h2>

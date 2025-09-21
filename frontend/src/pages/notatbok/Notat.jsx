@@ -4,7 +4,6 @@ import { hentNotatById, lagreNotat, oppdaterNotat } from '../../api/notater';
 import '../../styles/Notat.css';
 
 function Notat() {
-  // støtt både interesse og emne
   const params = useParams();
   const { interesse, notatId, blokkId, emnekode } = params;
 
@@ -49,12 +48,11 @@ function Notat() {
         return;
       }
 
-      // Nytt notat:
-      // Backend krever at eksakt én av interesse/emne er satt. Send begge, men én er null.
+      // backend krever at eksakt én av interesse/emne er satt: sender begge, men én er null.
       const respons = await lagreNotat({
         tittel,
         innhold,
-        blokkId: renBlokkId,                 // brukes kun i interesse-kontekst
+        blokkId: renBlokkId,                 
         interesse: iInteresseKontekst ? interesse : null,
         emne: iEmneKontekst ? emnekode : null,
       });
@@ -62,7 +60,7 @@ function Notat() {
       alert('Notatet ble lagret!');
       settErNytt(false);
 
-      // naviger til riktig visning av det nye notatet
+      // navigerer til riktig visning av det nye notatet
       if (iInteresseKontekst) {
         if (renBlokkId !== null) {
           navigate(`/interesse/${interesse}/notatbok/blokk/${renBlokkId}/notat/${respons.notatId}`);
@@ -76,7 +74,7 @@ function Notat() {
           navigate(`/emne/${emnekode}/notatbok/notat/${respons.notatId}`);
         }
       } else {
-        // om ingen param finnes
+        // fallback om ingen param finnes
         navigate(`/`);
       }
     } catch (err) {

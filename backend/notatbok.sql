@@ -21,8 +21,8 @@ create table if not exists notater (
 );
 
 -- helpful indexes
-CREATE INDEX IF NOT EXISTS idx_notater_blokk ON notater("blokkId");
-CREATE INDEX IF NOT EXISTS idx_notatblokker_emne   ON notatblokker(emne);
-CREATE INDEX IF NOT EXISTS idx_notatblokker_interesse ON notatblokker(interesse);
-CREATE INDEX IF NOT EXISTS idx_notater_emne        ON notater(emne);
-CREATE INDEX IF NOT EXISTS idx_notater_interesse   ON notater(interesse);
+create index IF not exists idx_notater_blokk ON notater("blokkId");
+create index IF not exists idx_notatblokker_emne   on notatblokker(emne);
+create index IF not exists idx_notatblokker_interesse on notatblokker(interesse);
+create index IF not exists idx_notater_emne        on notater(emne);
+create index IF not exists idx_notater_interesse   on notater(interesse);

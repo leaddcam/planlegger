@@ -11,7 +11,6 @@ function TilNotat({ notat, blokkId }) {
 
   const handleClick = () => {
     if (interesse) {
-      // interesse-kontekst
       if (harBlokk) {
         naviger(`/interesse/${interesse}/notatbok/blokk/${Number(blokkId)}/notat/${notat.notatId}`);
       } else {
@@ -21,7 +20,6 @@ function TilNotat({ notat, blokkId }) {
     }
 
     if (emnekode) {
-      // emne-kontekst
       if (harBlokk) {
         naviger(`/emne/${emnekode}/notatbok/blokk/${Number(blokkId)}/notat/${notat.notatId}`);
       } else {
@@ -29,8 +27,7 @@ function TilNotat({ notat, blokkId }) {
       }
       return;
     }
-
-    // fallback (om ingen kontekst finnes)
+    // fallback 
     naviger(`/`);
   };
 

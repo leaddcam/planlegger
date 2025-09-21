@@ -8,13 +8,13 @@ async function apiFetch(url, options = {}) {
     try { const j = await res.json(); msg = j.melding || j.error || msg; } catch {}
     throw new Error(msg);
   }
-  // No content
+  // ingen content
   if (res.status === 204) return null;
   return res.json();
 }
 
 /**
- * Hent én notatblokk
+ * henter én notatblokk
  * @returns {Promise<object>} f.eks. { blokkId, interesse|null, emne|null, navn, opprettelsesdato, antall_notater }
  */
 export async function hentNotatblokk(blokkId) {
@@ -22,8 +22,8 @@ export async function hentNotatblokk(blokkId) {
 }
 
 /**
- * Opprett notatblokk
- * Send *enten* interesse ELLER emne (den andre settes til null) + navn
+ * oppretter notatblokk
+ * sender *enten* interesse ELLER emne (den andre settes til null) + navn
  * @returns {Promise<object>} hele raden inkl. "blokkId"
  */
 export async function lagreNotatblokk({ interesse = null, emne = null, navn }) {
@@ -36,7 +36,7 @@ export async function lagreNotatblokk({ interesse = null, emne = null, navn }) {
 }
 
 /**
- * Hent alle blokker for en gitt interesse
+ * henter alle blokker for en gitt interesse
  * (matcher backend: GET /api/notatblokker/blokker/:interesse)
  */
 export async function hentNotatblokkerForInteresse(interesse) {
@@ -44,7 +44,7 @@ export async function hentNotatblokkerForInteresse(interesse) {
 }
 
 /**
- * Hent alle blokker for et gitt emne
+ * henter alle blokker for et gitt emne
  * (matcher backend: GET /api/notatblokker/blokker/emne/:emne)
  */
 export async function hentNotatblokkerForEmne(emne) {
@@ -52,9 +52,7 @@ export async function hentNotatblokkerForEmne(emne) {
 }
 
 
-/**
- * Slett notatblokk (og tilhørende notater slettes i backend)
- */
+// sletter notatblokk (og tilhørende notater slettes i backend)
 export async function slettNotatblokk(blokkId) {
   await apiFetch(`${BASE_URL}/${encodeURIComponent(blokkId)}`, { method: 'DELETE' });
 }

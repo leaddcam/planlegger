@@ -7,7 +7,6 @@ import { hentNotatblokk } from '../../api/notatblokker';
 import { hentNotaterForInteresse, hentNotaterForEmne } from '../../api/notater';
 
 function Notatblokk() {
-  // støtt både interesse og emne (hos deg heter emne typisk emnekode i ruta)
   const { interesse, emnekode, blokkId } = useParams();
   const blokkIdNum = Number(blokkId);
 
@@ -36,7 +35,7 @@ function Notatblokk() {
 
         if (!aktiv) return;
 
-        // Filtrer til notater i denne blokken
+        // filter: notater i denne blokken
         const iDenneBlokken = alleNotater.filter(
           (n) => Number(n.blokkId) === blokkIdNum
         );
@@ -68,7 +67,7 @@ function Notatblokk() {
         <h1>Blokk: {blokkNavn || 'Ukjent blokk'}</h1>
 
         <div className="knapper">
-          {/* Når du oppretter nytt notat i en blokk:
+          {/* når du oppretter nytt notat i en blokk:
              - setter interesse ELLER emne (den andre = null)
              - bruker blokkId = blokkIdNum
           */}

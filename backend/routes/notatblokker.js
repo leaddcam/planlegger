@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { query } = require('../db'); // <- pg helper
 
-// Øker antall_notater med 1
+// øker antall_notater med 1
 router.post('/oppdater-antall/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
@@ -24,7 +24,7 @@ router.post('/oppdater-antall/:blokkId', async (req, res) => {
   }
 });
 
-// Legger til notatblokk (variant 1 – bare interesse + navn)
+// legger til notatblokk 
 router.post('/blokk', async (req, res) => {
   const { interesse, emne = null, navn } = req.body;
 
@@ -48,7 +48,7 @@ router.post('/blokk', async (req, res) => {
   }
 });
 
-// (Beholdes kun hvis du trenger en egen /blokker-endepunkt – her med både interesse & emne-støtte)
+// ved behiv for eget /blokker-endepunkt med både interesse og emne-støtte
 router.post('/blokker', async (req, res) => {
   const { interesse, emne = null, navn } = req.body;
 
@@ -71,7 +71,7 @@ router.post('/blokker', async (req, res) => {
   }
 });
 
-// Henter alle blokker for en interesse
+// henter alle blokker for en interesse
 router.get('/blokker/:interesse', async (req, res) => {
   const { interesse } = req.params;
 
@@ -103,7 +103,7 @@ router.get('/blokker/emne/:emne', async (req, res) => {
 });
 
 
-// Henter én blokk basert på blokkId
+// henter én blokk basert på blokkId
 router.get('/blokk/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
@@ -127,10 +127,10 @@ router.delete('/:blokkId', async (req, res) => {
   const blokkId = req.params.blokkId;
 
   try {
-    // 1) Slett notater i blokken
+    // slett notater i blokken
     await query('DELETE FROM notater WHERE "blokkId" = $1', [blokkId]);
 
-    // 2) Slett selve blokken
+    // slett selve blokken
     const result = await query('DELETE FROM notatblokker WHERE "blokkId" = $1', [blokkId]);
 
     if (result.rowCount === 0) {

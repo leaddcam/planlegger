@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { lagreNotatblokk } from '../../api/notatblokker';
 
 /**
- * Props:
+ * props:
  * - blokk: objektmap { [blokkId]: { navn, notater: [] } }
  * - settBlokk: setState
  * - interesse?: string | null
@@ -26,7 +26,7 @@ function NyBlokk({ blokk, settBlokk, interesse = null, emne = null }) {
     try {
       settVenter(true);
 
-      // Send EKSakt én av interesse/emne (den andre blir null)
+      // sender interesse/emne (den andre blir null)
       const nyBlokk = await lagreNotatblokk({ interesse, emne, navn });
       // nyBlokk er hele raden fra backend, inkl. blokkId og navn
 

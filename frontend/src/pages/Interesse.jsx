@@ -7,11 +7,7 @@ import {TilNotatbok, TilHjem} from '../components';
 
 
 function Interesse() {
-  // bruker useParams hook til å returnere et objekt med den dynamiske delen av URL
   const {navn} = useParams(); 
-  // klikker interesseknapp --> blir tatt til /interesse/{navn}
-  // en side med en NotatKnapp
-
   return (
     <>
     <TilHjem />

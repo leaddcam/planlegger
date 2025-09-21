@@ -5,7 +5,7 @@ import NyttNotatModal from './NyttNotatModal';
 import '../../styles/NyttNotat.css';
 
 /**
- * Props:
+ * props:
  * - interesse?: string | null
  * - emne?: string | null
  * - blokkId?: number | null
@@ -16,7 +16,7 @@ function NyttNotat({ interesse: propInteresse = null, emne: propEmne = null, blo
   const navigate = useNavigate();
   const params = useParams();
 
-  // Fallback til URL-param om prop ikke er satt
+  // fallback til URL-param om prop ikke er satt
   const interesse = propInteresse ?? params.interesse ?? null;
   const emne = propEmne ?? params.emne ?? params.emnekode ?? null;
 
@@ -25,7 +25,7 @@ function NyttNotat({ interesse: propInteresse = null, emne: propEmne = null, blo
       const harBlokk =
         blokkId !== null && blokkId !== undefined && !Number.isNaN(Number(blokkId));
 
-      // Lagre notat – eksakt én av interesse/emne skal ha verdi
+      // lagrer notat – eksakt én av interesse/emne skal ha verdi
       const nyttNotat = await lagreNotat({
         tittel,
         innhold: '',
@@ -34,19 +34,19 @@ function NyttNotat({ interesse: propInteresse = null, emne: propEmne = null, blo
         emne: interesse ? null : (emne ? String(emne) : null),
       });
 
-      // Oppdater antall i blokk hvis relevant
+      // oppdaterer antall i blokk hvis relevant
       if (harBlokk) {
         await fetch(`http://localhost:3000/api/notatblokker/oppdater-antall/${Number(blokkId)}`, {
           method: 'POST',
         });
       }
 
-      // Oppdater lokal state (legg til nytt notat i liste)
+      // oppdaterer lokal state (legg til nytt notat i liste)
       if (settNotat) {
         settNotat((prev) => [...prev, { ...nyttNotat, blokkId: harBlokk ? Number(blokkId) : null, tittel, innhold: '' }]);
       }
 
-      // Naviger til det nye notatet
+      // navigerer til det nye notatet
       if (interesse) {
         if (harBlokk) {
           navigate(`/interesse/${interesse}/notatbok/blokk/${Number(blokkId)}/notat/${nyttNotat.notatId}`);
@@ -54,7 +54,6 @@ function NyttNotat({ interesse: propInteresse = null, emne: propEmne = null, blo
           navigate(`/interesse/${interesse}/notatbok/notat/${nyttNotat.notatId}`);
         }
       } else if (emne) {
-        // Emne-kontekst: juster til din faktiske rute for visning av enkelt-notat
         navigate(`/emne/${emne}/notatbok/notat/${nyttNotat.notatId}`);
       } else {
         navigate(`/`);

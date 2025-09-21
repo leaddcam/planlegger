@@ -1,6 +1,5 @@
 // hjemmesiden
 
-import React from 'react';
 import {TilEmne, TilInteresse} from '../components';
 import '../styles/Home.css';
 
@@ -14,7 +13,7 @@ function Home() {
                 <div className="liste-seksjon">
                     <h2>Dine emner:</h2>
                     <ul className="emne-liste">
-                        {/* emner: IN2010, IN2031, IN2090, IN2120, ECON1210 */}
+                        {/* endre slik at bruker kan legge inn emner selv */}
                         <li><TilEmne emne='IN2010' /></li>
                         <li><TilEmne emne='IN2031' /></li>
                         <li><TilEmne emne='IN2090' /></li>
