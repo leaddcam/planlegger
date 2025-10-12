@@ -5,3 +5,5 @@ export { default as Interesse } from './Interesse';
 export { default as Notatbok } from './notatbok/Notatbok';
 export { default as Notatblokk } from './notatbok/Notatblokk';
 export { default as Notat } from './notatbok/Notat';
+export { default as Login } from './Login';
+export { default as Signup } from './Signup';

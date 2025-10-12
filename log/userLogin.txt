@@ -1,0 +1,51 @@
+12.10.2025
+save user login information in database
+- email + username 
+- password (hashed)
+tie all information to user
+- home page (list of emner and interesser and all information tied to all pages within said categories)
+
+how?
+- in App.jsx:
+    implement AuthProvider to tie all pages to username
+    /login
+        page: Login
+    /signup
+        page: SignUp
+    /home
+        page (protected): element={<ProtectedRoute><Home /></ProtectedRoute>}
+- install packages: 
+    npm i argon2 jsonwebtoken cookie-parser cors nodemailer
+- alter database:
+    run script in userLogin.sql
+- alter server.js:
+    const cookieParser = require('cookie-parser');
+    specific cors setup
+- auth middleware
+    backend/middleware/auth.js
+- auth routes (register, verify, login, logout, me)
+    backend/routes/auth.js
+- apply "INSERT, set user_id = req.user.id"
+    on  "SELECT/UPDATE/DELETE, add AND user_id = $X"
+    on all routes to tie them to user data.
+- new .env base url 
+- API helpers:
+    frontend/src/api/client.ts
+    frontend/src/auth/AuthContext.tsx
+    frontend/src/auth/ProtectedRoute.tsx
+- wire notes etc to logged-in user
+    filter by user_id
+
+
+user login/signup flow:
+    Sign up: user enters email+password 
+    => you hash the password and save the user with email_verified = false 
+    => you create a one-time verification token, email it 
+    => user clicks link 
+    => you mark email_verified = true and (optionally) log them in.
+
+    Log in: user enters email+password 
+    => you verify against the stored hash (you do not save the password again) 
+    => set a session cookie 
+    => show the user’s notebooks/notes (scoped by user_id).
+
