@@ -36,7 +36,7 @@ function NyttNotat({ interesse: propInteresse = null, emne: propEmne = null, blo
 
       // oppdaterer antall i blokk hvis relevant
       if (harBlokk) {
-        await fetch(`http://localhost:3000/api/notatblokker/oppdater-antall/${Number(blokkId)}`, {
+        await fetch(`http://localhost:3031/api/notatblokker/oppdater-antall/${Number(blokkId)}`, {
           method: 'POST',
         });
       }

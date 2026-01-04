@@ -1,5 +1,5 @@
 // src/api/notater.js
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3031';
 const BASE_URL = `${API_BASE}/api/notater`;
 
 async function apiFetch(url, options = {}) {

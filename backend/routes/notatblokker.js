@@ -5,7 +5,7 @@ const { query } = require('../db'); // pg helper
 const requireAuth = require('../middleware/auth');
 
 //
-// svarer på http://localhost:3000/api/notater
+// svarer på http://localhost:3031/api/notater
 //
 
 
