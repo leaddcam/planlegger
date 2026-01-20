@@ -1,9 +1,10 @@
+// server.js
 // optional extra logs: node --trace-uncaught --trace-warnings --trace-exit server.js
 
-// load env once, early
-require("dotenv").config();
-console.log("NODE_ENV:", process.env.NODE_ENV);
-console.log("PORT env:", process.env.PORT);
+const config = require("./config");
+
+console.log("NODE_ENV:", config.env);
+console.log("PORT:", config.server.port);
 
 // hard crash visibility
 process.on("uncaughtException", (err) => {
@@ -37,8 +38,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
-    credentials: true,
+    origin: config.cors.origins,
+    credentials: config.cors.credentials,
   })
 );
 
@@ -48,6 +49,7 @@ app.get("/health", (req, res) => {
     ok: true,
     time: new Date().toISOString(),
     pid: process.pid,
+    env: config.env,
   });
 });
 
@@ -60,7 +62,6 @@ function safeUse(prefix, modulePath) {
   } catch (err) {
     console.error(`!!! Failed to mount ${prefix} from ${modulePath}`);
     console.error(err);
-    // if a route module can't load, it's usually best to stop immediately
     process.exitCode = 1;
   }
 }
@@ -76,13 +77,11 @@ app.use((err, req, res, next) => {
 });
 
 // start server with hard proof of binding
-const PORT = Number(process.env.PORT || 3031);
-
-const server = app.listen(PORT, "0.0.0.0", () => {
+const server = app.listen(config.server.port, "0.0.0.0", () => {
   console.log("LISTEN OK:", server.address());
-  console.log(`Try these in browser:`);
-  console.log(`  http://127.0.0.1:${PORT}/health`);
-  console.log(`  http://localhost:${PORT}/health`);
+  console.log("Try these in browser:");
+  console.log(`  http://127.0.0.1:${config.server.port}/health`);
+  console.log(`  http://localhost:${config.server.port}/health`);
 });
 
 // if listen fails (e.g. EADDRINUSE), you WILL see it here
@@ -94,4 +93,3 @@ server.on("error", (err) => {
 server.on("close", () => {
   console.trace("!!! HTTP server CLOSE event fired");
 });
-

@@ -44,6 +44,23 @@ const config = {
     },
   },
 
+  db: {
+  connectionString: must("DATABASE_URL"),
+  testConnection: optional("DB_TEST_CONNECTION", "false") === "true",
+  // ssl: isProd ? { rejectUnauthorized: false } : undefined,
+  },
+
+  server: {
+    port: optionalInt("PORT", 3031),
+  },
+  cors: {
+    origins: optional("CORS_ORIGINS", "http://localhost:5173")
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean),
+    credentials: true,
+  },
+  
   mail: {
     devSkipEmail: optional("DEV_SKIP_EMAIL", "false") === "true",
     from: optional("MAIL_FROM", "no-reply@example.com"),

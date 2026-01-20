@@ -1,16 +1,18 @@
 // db.js (PostgreSQL via pg)
 const { Pool } = require('pg');
-require('dotenv').config();
+const config = require("./config");
 
 // setter opp pool
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL // ssl: { rejectUnauthorized: false } // enable when you deploy to managed PG (Azure)
+    connectionString: config.db.connectionString, 
+    // ssl: { rejectUnauthorized: false } // enable when deploying to managed PG (Azure)
   });
 
 async function query(text, params) {
   return pool.query(text, params);
 }
 
+// startup db check
 async function testConnection() {
   try {
     const res = await pool.query('SELECT version()');
@@ -20,6 +22,8 @@ async function testConnection() {
     process.exitCode = 1;
   }
 }
-testConnection();
+if (config.db.testConnection) {
+  testConnection();
+}
 
 module.exports = { pool, query };
