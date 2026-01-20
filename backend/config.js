@@ -8,10 +8,12 @@ function must(name) {
   }
   return value;
 }
+
 function optional(name, fallback) {
   const v = process.env[name];
   return (v && String(v).trim()) ? v : fallback;
 }
+
 function optionalInt(name, fallback) {
   const v = process.env[name];
   if (!v || !String(v).trim()) return fallback;
@@ -22,6 +24,9 @@ function optionalInt(name, fallback) {
 
 const NODE_ENV = optional("NODE_ENV", "development");
 const isProd = NODE_ENV === "production";
+
+const tokenDays = optionalInt("AUTH_TOKEN_DAYS", 7);
+const cookieMaxAgeMs = 1000 * 60 * 60 * 24 * tokenDays;
 
 const config = {
   env: NODE_ENV,
@@ -35,6 +40,7 @@ const config = {
     jwtSecret: must("JWT_SECRET"),
     cookieName: optional("AUTH_COOKIE_NAME", "sid"),
     tokenDays: optionalInt("AUTH_TOKEN_DAYS", 7),
+    cookieMaxAgeMs,
     cookie: {
       httpOnly: true,
       sameSite: isProd ? "none" : "lax",
@@ -45,14 +51,15 @@ const config = {
   },
 
   db: {
-  connectionString: must("DATABASE_URL"),
-  testConnection: optional("DB_TEST_CONNECTION", "false") === "true",
-  // ssl: isProd ? { rejectUnauthorized: false } : undefined,
+    connectionString: must("DATABASE_URL"),
+    testConnection: optional("DB_TEST_CONNECTION", "false") === "true",
+    // ssl: isProd ? { rejectUnauthorized: false } : undefined,
   },
 
   server: {
     port: optionalInt("PORT", 3031),
   },
+
   cors: {
     origins: optional("CORS_ORIGINS", "http://localhost:5173")
       .split(",")
@@ -60,7 +67,7 @@ const config = {
       .filter(Boolean),
     credentials: true,
   },
-  
+
   mail: {
     devSkipEmail: optional("DEV_SKIP_EMAIL", "false") === "true",
     from: optional("MAIL_FROM", "no-reply@example.com"),

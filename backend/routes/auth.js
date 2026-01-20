@@ -10,7 +10,7 @@ const config = require("../config"); // new
 
 const COOKIE_OPTS = {
   ...config.auth.cookie,
-  maxAge: 1000 * 60 * 60 * 24 * config.auth.tokenDays,
+  maxAge: config.auth.cookieMaxAgeMs,
 };
 
 function setSessionCookie(res, uid) {
