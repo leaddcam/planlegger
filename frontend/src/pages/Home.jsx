@@ -14,10 +14,9 @@ function Home() {
                     <h2>Dine emner:</h2>
                     <ul className="emne-liste">
                         {/* endre slik at bruker kan legge inn emner selv */}
-                        <li><TilEmne emne='IN2010' /></li>
-                        <li><TilEmne emne='IN2031' /></li>
-                        <li><TilEmne emne='IN2090' /></li>
-                        <li><TilEmne emne='IN2120' /></li>
+                        <li><TilEmne emne='IN2000' /></li>
+                        <li><TilEmne emne='IN3240' /></li>
+                        <li><TilEmne emne='IN1160' /></li>
                     </ul>
                 </div>
 

@@ -8,11 +8,9 @@ import InputFelt from '../components/InputFelt'
 
 // emneData: objekt som holder emne-spsifikk data
 const emneData = {
-  IN2010: {title: 'Algoritmer og datastrukturer'},
-  IN2031: {title: 'Prosjektoppgave i programmering'},
-  IN2090: {title: 'Databaser og datamodellering'},
-  IN2120: {title: 'Informasjonssikkerhet'},
-  ECON1210: {title: 'Mikroøkonomi'},
+  IN2000: {title: 'Prosjektoppgave'},
+  IN3240: {title: 'Testing'},
+  IN1160: {title: 'Maskinlæring'}
 };
 
 function Emne() {
